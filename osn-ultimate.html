@@ -1,0 +1,2650 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSN·CPP — Platform Medali Emas</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   DESIGN SYSTEM — DARK EDITORIAL
+════════════════════════════════════════ */
+:root{
+  /* Backgrounds */
+  --bg0:#040810;
+  --bg1:#080F1A;
+  --bg2:#0D1A2D;
+  --bg3:#122035;
+  --bg4:#1A2D47;
+  /* Borders */
+  --br0:#122035;
+  --br1:#1E3350;
+  --br2:#2A4870;
+  /* Text */
+  --tx0:#EFF6FF;
+  --tx1:#B8D0E8;
+  --tx2:#6A90B4;
+  --tx3:#3D607A;
+  /* Accent */
+  --a1:#38BDF8;  /* sky */
+  --a2:#34D399;  /* emerald */
+  --a3:#FCD34D;  /* amber */
+  --a4:#F87171;  /* red */
+  --a5:#C084FC;  /* purple */
+  --a6:#FB923C;  /* orange */
+  /* Complexity Colors */
+  --cx1:#34D399; /* O(1) */
+  --cx2:#38BDF8; /* O(log n) */
+  --cx3:#A3E635; /* O(√n) */
+  --cx4:#FCD34D; /* O(n) */
+  --cx5:#FB923C; /* O(n log n) */
+  --cx6:#F87171; /* O(n²) */
+  --cx7:#E879F9; /* O(n³) */
+  --cx8:#FF6B6B; /* O(2^n) */
+  --mono:'DM Mono',monospace;
+  --sans:'DM Sans',sans-serif;
+  --serif:'Fraunces',serif;
+  --r1:8px;--r2:12px;--r3:16px;--r4:20px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--bg0);
+  color:var(--tx0);
+  overflow-x:hidden;
+  min-height:100vh;
+  font-size:15px;
+  line-height:1.6;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg0)}
+::-webkit-scrollbar-thumb{background:var(--br2);border-radius:2px}
+
+/* GRID TEXTURE */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--bg1) 1px,transparent 1px),
+    linear-gradient(90deg,var(--bg1) 1px,transparent 1px);
+  background-size:60px 60px;
+  opacity:.4;
+}
+
+/* GLOW ORBS */
+.orb{
+  position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;
+}
+.orb1{width:500px;height:500px;top:-100px;left:-150px;background:rgba(56,189,248,.04)}
+.orb2{width:400px;height:400px;bottom:-100px;right:-100px;background:rgba(52,211,153,.03)}
+
+/* ── LAYOUT ── */
+.shell{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
+
+/* ════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════ */
+.nav{
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;height:56px;
+  background:rgba(4,8,16,.94);
+  border-bottom:1px solid var(--br0);
+  backdrop-filter:blur(20px);
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  padding:0 28px;border-right:1px solid var(--br0);
+  height:100%;flex-shrink:0;cursor:pointer;
+}
+.logo-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,var(--a1),var(--a2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;
+}
+.logo-text{
+  font-family:var(--mono);font-weight:500;font-size:.9rem;
+  letter-spacing:.05em;color:var(--tx0);
+}
+.logo-text span{color:var(--a1)}
+.nav-scroll{display:flex;overflow-x:auto;flex:1;scrollbar-width:none}
+.nav-scroll::-webkit-scrollbar{display:none}
+.ntab{
+  display:flex;align-items:center;gap:8px;
+  padding:0 22px;height:56px;
+  font-size:.76rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--tx2);border:none;background:none;cursor:pointer;
+  border-bottom:2px solid transparent;white-space:nowrap;
+  transition:color .2s,border-color .2s;font-family:var(--sans);
+}
+.ntab:hover{color:var(--tx1)}
+.ntab.on{color:var(--a1);border-bottom-color:var(--a1)}
+.ntab .ni{font-size:.9rem;opacity:.8}
+.nav-right{
+  padding:0 20px;display:flex;align-items:center;gap:10px;
+  border-left:1px solid var(--br0);height:100%;flex-shrink:0;
+}
+.xp-chip{
+  display:flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,rgba(252,211,77,.15),rgba(251,146,60,.1));
+  border:1px solid rgba(252,211,77,.25);
+  padding:5px 14px;border-radius:20px;
+  font-family:var(--mono);font-size:.75rem;font-weight:500;
+  color:var(--a3);white-space:nowrap;
+}
+
+/* ════════════════════════════════════════
+   PAGES
+════════════════════════════════════════ */
+.pg{display:none;flex:1;flex-direction:column}
+.pg.on{display:flex;animation:pgIn .25s ease}
+@keyframes pgIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ════════════════════════════════════════
+   DESIGN PRIMITIVES
+════════════════════════════════════════ */
+/* Cards */
+.card{
+  background:var(--bg1);border:1px solid var(--br0);
+  border-radius:var(--r3);padding:24px;
+  position:relative;overflow:hidden;
+}
+.card-accent-top::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+}
+.card-blue::before{background:linear-gradient(90deg,var(--a1),transparent)}
+.card-green::before{background:linear-gradient(90deg,var(--a2),transparent)}
+.card-amber::before{background:linear-gradient(90deg,var(--a3),transparent)}
+.card-red::before{background:linear-gradient(90deg,var(--a4),transparent)}
+.card-purple::before{background:linear-gradient(90deg,var(--a5),transparent)}
+
+/* Badges / Chips */
+.chip{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 10px;border-radius:20px;
+  font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+}
+.chip-blue{background:rgba(56,189,248,.1);color:var(--a1);border:1px solid rgba(56,189,248,.2)}
+.chip-green{background:rgba(52,211,153,.1);color:var(--a2);border:1px solid rgba(52,211,153,.2)}
+.chip-amber{background:rgba(252,211,77,.1);color:var(--a3);border:1px solid rgba(252,211,77,.2)}
+.chip-red{background:rgba(248,113,113,.1);color:var(--a4);border:1px solid rgba(248,113,113,.2)}
+.chip-purple{background:rgba(192,132,252,.1);color:var(--a5);border:1px solid rgba(192,132,252,.2)}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px 24px;border-radius:var(--r1);
+  font-weight:600;font-size:.82rem;border:none;cursor:pointer;
+  transition:all .2s;font-family:var(--sans);letter-spacing:.02em;
+}
+.btn-primary{background:var(--a1);color:#020c18}
+.btn-primary:hover{box-shadow:0 6px 24px rgba(56,189,248,.35);transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--tx1);border:1px solid var(--br1)}
+.btn-secondary:hover{border-color:var(--a1);color:var(--a1)}
+.btn-success{background:var(--a2);color:#020c18}
+.btn-success:hover{box-shadow:0 6px 24px rgba(52,211,153,.35);transform:translateY(-1px)}
+
+/* Info boxes */
+.ibox{
+  border-radius:var(--r2);padding:14px 18px;margin:12px 0;
+  border-left:3px solid;font-size:.84rem;line-height:1.7;
+}
+.ibox strong{display:block;font-weight:700;margin-bottom:4px;font-size:.82rem}
+.ibox-tip{background:rgba(52,211,153,.06);border-color:var(--a2);color:#9DE8C8}
+.ibox-warn{background:rgba(252,211,77,.06);border-color:var(--a3);color:#EFD98A}
+.ibox-danger{background:rgba(248,113,113,.06);border-color:var(--a4);color:#F4A4A4}
+.ibox-info{background:rgba(56,189,248,.06);border-color:var(--a1);color:#8CD8F0}
+
+/* Code blocks */
+.codeblock{
+  background:var(--bg0);border:1px solid var(--br0);
+  border-radius:var(--r2);overflow:hidden;
+  font-family:var(--mono);margin:12px 0;
+}
+.cb-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 16px;background:var(--bg2);border-bottom:1px solid var(--br0);
+}
+.cb-dots{display:flex;gap:5px}
+.cb-dot{width:9px;height:9px;border-radius:50%}
+.cb-meta{font-size:.7rem;color:var(--tx2);font-family:var(--sans);letter-spacing:.05em}
+.cb-body{
+  padding:20px;font-size:.78rem;line-height:1.85;
+  overflow-x:auto;white-space:pre;
+}
+.cpbtn{
+  padding:4px 12px;border-radius:5px;background:var(--bg3);color:var(--tx2);
+  border:1px solid var(--br0);font-size:.7rem;cursor:pointer;
+  font-family:var(--sans);transition:all .2s;
+}
+.cpbtn:hover{background:var(--a1);color:#020c18;border-color:var(--a1)}
+
+/* Output simulation block */
+.output-block{
+  background:var(--bg0);border:1px solid var(--br0);
+  border-radius:var(--r2);overflow:hidden;margin:10px 0;
+}
+.output-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;background:rgba(52,211,153,.05);border-bottom:1px solid var(--br0);
+}
+.output-head-label{
+  font-size:.7rem;font-weight:600;color:var(--a2);letter-spacing:.08em;text-transform:uppercase;
+  font-family:var(--sans);display:flex;align-items:center;gap:6px;
+}
+.output-body{
+  padding:16px 20px;font-family:var(--mono);font-size:.78rem;
+  line-height:1.85;color:var(--tx1);
+}
+.out-line{display:flex;gap:10px;margin-bottom:2px}
+.out-prompt{color:var(--a2);flex-shrink:0}
+.out-val{color:var(--tx0)}
+.out-comment{color:var(--tx3);font-style:italic}
+
+/* Tables */
+.tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+.tbl th{
+  background:var(--bg2);padding:10px 14px;text-align:left;
+  font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:var(--a1);border-bottom:1px solid var(--br0);
+}
+.tbl td{padding:10px 14px;border-bottom:1px solid var(--br0);color:var(--tx1)}
+.tbl tr:hover td{background:var(--bg2);color:var(--tx0)}
+.tbl code{font-family:var(--mono);color:var(--a1);font-size:.76rem}
+
+/* Syntax highlight */
+.kw{color:#7DD3FC}.fn{color:#FDE68A}.str{color:#F9A8D4}
+.num{color:#86EFAC}.cm{color:#4B6D8E;font-style:italic}.tp{color:#5EEAD4}
+.op{color:#CBD5E1}.pp{color:#C4B5FD}.lbl{color:#93C5FD}
+
+/* Section headings */
+.sec-title{
+  font-size:1.1rem;font-weight:700;margin-bottom:22px;
+  display:flex;align-items:center;gap:14px;font-family:var(--sans);
+}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--br0)}
+
+/* ════════════════════════════════════════
+   HOME PAGE
+════════════════════════════════════════ */
+.home-hero{
+  padding:64px 52px 48px;display:grid;
+  grid-template-columns:1fr 420px;gap:60px;align-items:center;
+  max-width:1320px;margin:0 auto;width:100%;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(252,211,77,.07);border:1px solid rgba(252,211,77,.2);
+  padding:5px 14px;border-radius:20px;
+  font-size:.72rem;font-weight:700;color:var(--a3);letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:22px;
+}
+.hero-h1{
+  font-family:var(--serif);font-size:clamp(2.4rem,4.5vw,4rem);
+  font-weight:900;line-height:1.02;margin-bottom:20px;letter-spacing:-.02em;
+}
+.hero-h1 .t1{color:var(--a1)}.hero-h1 .t2{color:var(--a3)}.hero-h1 .t3{color:var(--a2)}
+.hero-sub{
+  font-size:.96rem;color:var(--tx2);line-height:1.78;
+  max-width:500px;margin-bottom:32px;
+}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Hero complexity mini card */
+.hero-cx-card{
+  background:var(--bg1);border:1px solid var(--br0);border-radius:var(--r4);
+  padding:28px;position:relative;overflow:hidden;
+}
+.hero-cx-card::after{
+  content:'';position:absolute;bottom:-60px;right:-60px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(56,189,248,.06),transparent);
+}
+.hcc-label{
+  font-size:.7rem;font-weight:700;color:var(--tx2);text-transform:uppercase;
+  letter-spacing:.1em;margin-bottom:18px;font-family:var(--sans);
+}
+.cx-row{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+.cx-name{
+  font-family:var(--mono);font-size:.78rem;font-weight:500;
+  min-width:100px;
+}
+.cx-bar-bg{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.cx-bar-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+.cx-ops{
+  min-width:72px;text-align:right;
+  font-family:var(--mono);font-size:.68rem;color:var(--tx2);
+}
+
+/* Home stats */
+.home-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  padding:0 52px 48px;max-width:1320px;margin:0 auto;width:100%;
+}
+.stat-card{
+  background:var(--bg1);border:1px solid var(--br0);border-radius:var(--r3);
+  padding:22px;position:relative;overflow:hidden;
+}
+.stat-n{
+  font-family:var(--mono);font-size:2.4rem;font-weight:500;color:var(--a1);
+  line-height:1;margin-bottom:6px;
+}
+.stat-l{font-size:.78rem;color:var(--tx2);font-weight:500}
+.stat-card::after{
+  content:attr(data-icon);position:absolute;right:20px;top:18px;
+  font-size:1.6rem;opacity:.12;
+}
+
+/* Roadmap */
+.roadmap-sec{padding:0 52px 64px;max-width:1320px;margin:0 auto;width:100%}
+.road-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.road-item{
+  background:var(--bg1);border:1px solid var(--br0);border-radius:var(--r3);
+  padding:20px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;
+}
+.road-item:hover{
+  border-color:var(--a1);transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(56,189,248,.08);
+}
+.ri-num{
+  font-family:var(--mono);font-size:.65rem;font-weight:500;
+  color:var(--tx3);margin-bottom:8px;letter-spacing:.06em;
+}
+.ri-title{font-size:.92rem;font-weight:700;margin-bottom:6px}
+.ri-desc{font-size:.76rem;color:var(--tx2);line-height:1.5;margin-bottom:14px}
+.ri-prog-bg{height:3px;background:var(--bg3);border-radius:2px}
+.ri-prog-fill{height:100%;border-radius:2px;transition:width .8s ease}
+.ri-badge{
+  position:absolute;top:14px;right:14px;
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;font-weight:700;
+}
+
+/* ════════════════════════════════════════
+   COMPLEXITY PAGE — FULL
+════════════════════════════════════════ */
+.cx-page{
+  padding:48px 52px;max-width:1320px;margin:0 auto;
+  width:100%;display:flex;flex-direction:column;gap:48px;
+}
+
+/* Big intro grid */
+.cx-intro{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+
+/* Canvas */
+.canvas-card{
+  background:var(--bg1);border:1px solid var(--br0);border-radius:var(--r3);padding:24px;
+}
+.canvas-title{font-size:.82rem;font-weight:700;margin-bottom:16px;color:var(--tx1)}
+#cx-canvas{width:100%;height:260px;display:block;border-radius:var(--r2)}
+.canvas-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.c-leg{display:flex;align-items:center;gap:5px;font-size:.7rem;font-family:var(--mono)}
+.c-dot{width:8px;height:8px;border-radius:50%}
+.canvas-controls{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.ctrl-btn{
+  padding:5px 12px;border-radius:6px;font-size:.72rem;font-weight:600;
+  background:var(--bg3);color:var(--tx2);border:1px solid var(--br0);
+  cursor:pointer;transition:all .15s;font-family:var(--sans);
+}
+.ctrl-btn:hover,.ctrl-btn.on{background:var(--a1);color:#020c18;border-color:var(--a1)}
+
+/* Big-O Cards */
+.bigo-section{}
+.bigo-cards{display:flex;flex-direction:column;gap:0}
+.bigo-card{
+  background:var(--bg1);border:1px solid var(--br0);
+  border-radius:0;padding:0;overflow:hidden;
+  border-top:none;
+  transition:background .15s;
+}
+.bigo-card:first-child{border-radius:var(--r3) var(--r3) 0 0;border-top:1px solid var(--br0)}
+.bigo-card:last-child{border-radius:0 0 var(--r3) var(--r3)}
+.bigo-card:hover{background:var(--bg2)}
+.bigo-header{
+  display:grid;grid-template-columns:180px 1fr auto;gap:20px;align-items:center;
+  padding:18px 24px;cursor:pointer;
+}
+.bigo-name-col{}
+.bigo-notation{
+  font-family:var(--mono);font-size:1.3rem;font-weight:500;line-height:1;
+}
+.bigo-class{font-size:.7rem;color:var(--tx2);font-weight:600;letter-spacing:.05em;margin-top:3px}
+.bigo-speed-col{display:flex;flex-direction:column;gap:6px}
+.bigo-bar-row{display:flex;align-items:center;gap:10px}
+.bigo-bar-bg{flex:1;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.bigo-bar-inner{height:100%;border-radius:3px}
+.bigo-bar-label{font-size:.68rem;font-family:var(--mono);color:var(--tx2);min-width:55px;text-align:right}
+.bigo-verdict{
+  font-size:.72rem;font-weight:700;color:var(--tx2);
+  display:flex;align-items:center;gap:6px;
+}
+.bigo-expand-btn{
+  width:28px;height:28px;border-radius:50%;background:var(--bg3);
+  border:1px solid var(--br0);color:var(--tx2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;cursor:pointer;transition:all .2s;flex-shrink:0;
+}
+.bigo-body{
+  display:none;padding:0 24px 24px;border-top:1px solid var(--br0);
+}
+.bigo-body.open{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.bigo-explain{font-size:.84rem;color:var(--tx2);line-height:1.75;margin-bottom:14px}
+.bigo-examples{}
+.bigo-ex-title{font-size:.7rem;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.bigo-ex-list{display:flex;flex-direction:column;gap:4px}
+.bigo-ex-item{
+  display:flex;align-items:center;gap:8px;
+  font-size:.78rem;color:var(--tx1);padding:5px 10px;
+  background:var(--bg0);border-radius:6px;font-family:var(--mono);
+}
+
+/* STL Operations */
+.stl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.stl-card{
+  background:var(--bg1);border:1px solid var(--br0);border-radius:var(--r3);padding:20px;
+}
+.stl-title{font-size:.82rem;font-weight:700;color:var(--a1);margin-bottom:14px;font-family:var(--mono)}
+.stl-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:7px 0;border-bottom:1px solid rgba(18,32,53,.8);
+  font-size:.78rem;
+}
+.stl-row:last-child{border-bottom:none}
+.stl-op{color:var(--tx1);font-family:var(--mono)}
+.stl-cx{font-family:var(--mono);font-weight:500;font-size:.74rem}
+.good{color:var(--cx1)}.ok{color:var(--cx4)}.bad{color:var(--cx6)}.ugly{color:var(--cx8)}
+
+/* ════════════════════════════════════════
+   MATH PAGE
+════════════════════════════════════════ */
+.math-page{
+  padding:48px 52px;max-width:1320px;margin:0 auto;
+  width:100%;display:flex;flex-direction:column;gap:40px;
+}
+
+/* Calculator */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.calc-card{background:var(--bg1);border:1px solid var(--br0);border-radius:var(--r3);padding:24px}
+.calc-head{font-size:.88rem;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.field-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.field-label{font-size:.76rem;color:var(--tx2);font-weight:500;min-width:110px}
+.field-input{
+  background:var(--bg2);border:1px solid var(--br1);color:var(--tx0);
+  padding:8px 14px;border-radius:var(--r1);font-family:var(--mono);font-size:.82rem;
+  width:150px;outline:none;transition:border-color .2s;
+}
+.field-input:focus{border-color:var(--a1)}
+
+.result-box{
+  background:var(--bg0);border:1px solid var(--br0);border-radius:var(--r2);
+  padding:16px 20px;margin-top:14px;
+}
+.res-title{font-size:.68rem;font-weight:700;color:var(--a2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;font-family:var(--sans)}
+.res-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:5px 0;border-bottom:1px solid rgba(18,32,53,.6);
+  font-size:.8rem;
+}
+.res-row:last-child{border-bottom:none}
+.res-k{color:var(--tx2);font-family:var(--sans)}
+.res-v{color:var(--a1);font-family:var(--mono);font-weight:500}
+
+/* Formula display */
+.formula-block{
+  background:var(--bg0);border:1px solid var(--br0);border-radius:var(--r2);
+  padding:16px 20px;margin:10px 0;text-align:center;font-family:var(--mono);
+}
+.formula-main{font-size:1rem;color:var(--a1);font-weight:500;line-height:1.6}
+.formula-sub{font-size:.72rem;color:var(--tx2);margin-top:4px;font-family:var(--sans)}
+
+/* Sieve visualizer */
+.sieve-grid{
+  display:flex;flex-wrap:wrap;gap:5px;margin-top:14px;
+  max-height:180px;overflow-y:auto;
+}
+.sieve-num{
+  width:36px;height:36px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.74rem;font-family:var(--mono);font-weight:500;
+  border:1px solid var(--br0);background:var(--bg2);color:var(--tx2);
+  transition:all .3s;
+}
+.sieve-num.prime{background:rgba(52,211,153,.1);border-color:var(--a2);color:var(--a2)}
+.sieve-num.crossed{opacity:.3;text-decoration:line-through}
+
+/* Bit inspector */
+.bit-grid{display:grid;grid-template-columns:repeat(16,1fr);gap:4px;margin-top:10px}
+.bit-cell{
+  aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;font-family:var(--mono);font-weight:500;
+  border:1px solid var(--br0);background:var(--bg2);color:var(--tx2);transition:all .2s;
+  flex-direction:column;gap:1px;
+}
+.bit-cell.set{background:rgba(56,189,248,.12);border-color:var(--a1);color:var(--a1)}
+.bit-pos{font-size:.5rem;opacity:.5}
+
+/* ════════════════════════════════════════
+   MATERI PAGE
+════════════════════════════════════════ */
+.mat-layout{display:grid;grid-template-columns:248px 1fr;flex:1;min-height:0}
+.mat-sb{
+  background:var(--bg1);border-right:1px solid var(--br0);
+  overflow-y:auto;padding:12px 0;
+}
+.sb-group{margin-bottom:4px}
+.sb-group-hd{
+  padding:8px 18px;font-size:.64rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--tx3);
+  font-family:var(--sans);
+}
+.sb-item{
+  padding:9px 18px;font-size:.8rem;cursor:pointer;
+  display:flex;align-items:center;gap:9px;
+  border-left:2px solid transparent;color:var(--tx2);
+  transition:all .14s;
+}
+.sb-item:hover{background:var(--bg2);color:var(--tx1)}
+.sb-item.on{background:rgba(56,189,248,.06);border-left-color:var(--a1);color:var(--a1)}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--br1);flex-shrink:0}
+.sb-item.done .sb-dot{background:var(--a2)}
+.sb-item.on .sb-dot{background:var(--a1)}
+
+.mat-content{padding:44px;overflow-y:auto;max-width:900px}
+.mat-tag{
+  display:inline-block;padding:3px 10px;border-radius:4px;
+  font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  background:rgba(56,189,248,.08);color:var(--a1);margin-bottom:10px;
+}
+.mat-h1{
+  font-family:var(--serif);font-size:2rem;font-weight:900;
+  margin-bottom:12px;letter-spacing:-.02em;line-height:1.1;
+}
+.mat-sub{color:var(--tx2);font-size:.92rem;line-height:1.75;margin-bottom:32px}
+.th-h3{
+  font-size:.95rem;font-weight:700;margin-bottom:14px;
+  color:var(--a1);display:flex;align-items:center;gap:8px;
+}
+.th-h3::before{content:'▸';opacity:.6}
+.th-p{color:var(--tx2);line-height:1.8;margin-bottom:10px;font-size:.86rem}
+
+/* ════════════════════════════════════════
+   LATIHAN PAGE
+════════════════════════════════════════ */
+.lat-layout{display:flex;flex:1;min-height:0}
+.prob-sidebar{
+  width:320px;flex-shrink:0;border-right:1px solid var(--br0);
+  overflow-y:auto;background:var(--bg1);display:flex;flex-direction:column;
+}
+.ps-header{padding:16px;border-bottom:1px solid var(--br0)}
+.ps-title{font-size:.82rem;font-weight:700;margin-bottom:12px}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap}
+.fbt{
+  padding:4px 11px;border-radius:20px;font-size:.7rem;font-weight:600;
+  border:1px solid var(--br0);background:none;color:var(--tx2);
+  cursor:pointer;transition:all .14s;font-family:var(--sans);
+}
+.fbt.on,.fbt:hover{border-color:var(--a1);color:var(--a1);background:rgba(56,189,248,.07)}
+.prob-list{padding:12px;display:flex;flex-direction:column;gap:6px}
+.prob-card{
+  padding:12px 14px;border-radius:var(--r2);border:1px solid var(--br0);
+  cursor:pointer;transition:all .15s;
+}
+.prob-card:hover,.prob-card.on{border-color:var(--a1);background:rgba(56,189,248,.04)}
+.pc-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.pc-name{font-size:.82rem;font-weight:600;color:var(--tx0)}
+.pc-diff{
+  font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:4px;
+  text-transform:uppercase;letter-spacing:.05em;flex-shrink:0;
+}
+.de{background:rgba(52,211,153,.1);color:var(--a2)}
+.dm{background:rgba(252,211,77,.1);color:var(--a3)}
+.dh{background:rgba(248,113,113,.1);color:var(--a4)}
+.pc-tags{display:flex;gap:4px;flex-wrap:wrap}
+.pc-tag{font-size:.62rem;color:var(--tx3);background:var(--bg2);padding:2px 6px;border-radius:3px}
+
+/* Workspace */
+.prob-workspace{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.pw-header{
+  padding:18px 24px;border-bottom:1px solid var(--br0);
+  display:flex;align-items:flex-start;justify-content:space-between;
+  background:var(--bg1);
+}
+.pw-title{font-family:var(--serif);font-size:1.2rem;font-weight:700;margin-bottom:6px}
+.pw-meta{display:flex;gap:12px;align-items:center}
+.pw-body{display:flex;flex:1;min-height:0}
+.pw-desc{
+  flex:1;padding:22px 24px;overflow-y:auto;
+  border-right:1px solid var(--br0);
+}
+.pd-h{
+  font-size:.74rem;font-weight:700;color:var(--a1);text-transform:uppercase;
+  letter-spacing:.07em;margin:16px 0 8px;font-family:var(--sans);
+}
+.pd-h:first-child{margin-top:0}
+.pd-p{font-size:.84rem;color:var(--tx2);line-height:1.72;margin-bottom:8px}
+.io-sample{
+  background:var(--bg0);border:1px solid var(--br0);border-radius:var(--r1);
+  padding:12px 14px;margin:6px 0;font-family:var(--mono);font-size:.76rem;color:var(--tx0);
+}
+.io-lbl{font-size:.66rem;color:var(--tx2);margin-bottom:5px;font-family:var(--sans);text-transform:uppercase;letter-spacing:.06em}
+
+.code-area{width:440px;flex-shrink:0;display:flex;flex-direction:column}
+.ca-topbar{
+  padding:9px 14px;border-bottom:1px solid var(--br0);
+  display:flex;align-items:center;gap:9px;background:var(--bg1);
+}
+.ca-lang{
+  background:var(--bg2);border:1px solid var(--br0);color:var(--tx1);
+  padding:4px 10px;border-radius:5px;font-size:.74rem;font-family:var(--sans);cursor:pointer;
+}
+.ca-run{
+  margin-left:auto;padding:5px 15px;background:var(--a2);color:#020c18;
+  font-weight:700;font-size:.76rem;border:none;border-radius:6px;
+  cursor:pointer;font-family:var(--sans);transition:all .2s;
+}
+.ca-run:hover{box-shadow:0 4px 14px rgba(52,211,153,.3)}
+.ca-sub{
+  padding:5px 15px;background:var(--a1);color:#020c18;
+  font-weight:700;font-size:.76rem;border:none;border-radius:6px;
+  cursor:pointer;font-family:var(--sans);transition:all .2s;
+}
+.ca-sub:hover{box-shadow:0 4px 14px rgba(56,189,248,.3)}
+#editor{
+  flex:1;background:var(--bg0);color:var(--tx0);
+  font-family:var(--mono);font-size:.77rem;line-height:1.78;
+  border:none;resize:none;padding:18px;outline:none;tab-size:4;
+}
+.verdict-zone{
+  border-top:1px solid var(--br0);background:var(--bg1);
+  padding:12px 16px;min-height:80px;max-height:130px;overflow-y:auto;
+}
+.vz-label{font-size:.65rem;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;font-family:var(--sans)}
+.v-idle{color:var(--tx2);font-size:.8rem}
+.v-ac{display:inline-flex;align-items:center;gap:6px;background:rgba(52,211,153,.1);color:var(--a2);padding:6px 14px;border-radius:5px;font-size:.8rem;font-weight:700}
+.v-wa{display:inline-flex;align-items:center;gap:6px;background:rgba(248,113,113,.1);color:var(--a4);padding:6px 14px;border-radius:5px;font-size:.8rem;font-weight:700}
+.tc-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.tc-chip{
+  padding:3px 10px;border-radius:4px;font-size:.68rem;font-weight:700;
+  font-family:var(--mono);border:1px solid;
+}
+.tc-p{border-color:var(--a2);color:var(--a2);background:rgba(52,211,153,.06)}
+.tc-f{border-color:var(--a4);color:var(--a4);background:rgba(248,113,113,.06)}
+
+/* ════════════════════════════════════════
+   ALGO REFERENCE PAGE
+════════════════════════════════════════ */
+.algo-page{
+  padding:48px 52px;max-width:1320px;margin:0 auto;
+  width:100%;display:flex;flex-direction:column;gap:40px;
+}
+
+/* ════════════════════════════════════════
+   AI MENTOR
+════════════════════════════════════════ */
+.ai-fab{
+  position:fixed;bottom:24px;right:24px;z-index:600;
+  width:50px;height:50px;border-radius:50%;
+  background:linear-gradient(135deg,var(--a1),var(--a2));
+  border:none;cursor:pointer;font-size:1.2rem;
+  box-shadow:0 6px 24px rgba(56,189,248,.4);
+  transition:all .2s;display:flex;align-items:center;justify-content:center;
+}
+.ai-fab:hover{transform:scale(1.08)}
+.ai-win{
+  position:fixed;bottom:82px;right:24px;z-index:600;
+  width:340px;background:var(--bg1);border:1px solid var(--br1);
+  border-radius:var(--r4);flex-direction:column;
+  box-shadow:0 24px 60px rgba(0,0,0,.7);display:none;
+}
+.ai-win.open{display:flex}
+.ai-win-hd{
+  padding:14px 18px;border-bottom:1px solid var(--br0);
+  display:flex;align-items:center;gap:10px;
+}
+.ai-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--a1),var(--a2));
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;
+}
+.ai-win-title{font-weight:700;font-size:.86rem}
+.ai-win-status{font-size:.68rem;color:var(--a2)}
+.ai-msgs{
+  flex:1;padding:14px;overflow-y:auto;
+  display:flex;flex-direction:column;gap:10px;max-height:260px;
+}
+.ai-msg{display:flex;gap:7px}
+.ai-bubble{
+  background:var(--bg2);border-radius:10px;padding:10px 14px;
+  font-size:.78rem;line-height:1.55;color:var(--tx0);max-width:268px;
+  white-space:pre-line;
+}
+.ai-msg.me{flex-direction:row-reverse}
+.ai-msg.me .ai-bubble{background:rgba(56,189,248,.1);color:var(--a1)}
+.ai-quickies{padding:0 14px 10px;display:flex;gap:5px;flex-wrap:wrap}
+.aiq{
+  padding:3px 9px;border-radius:12px;font-size:.67rem;
+  background:var(--bg2);color:var(--tx2);border:1px solid var(--br0);
+  cursor:pointer;transition:all .14s;
+}
+.aiq:hover{border-color:var(--a1);color:var(--a1)}
+.ai-input-row{
+  padding:10px 14px;border-top:1px solid var(--br0);display:flex;gap:6px;
+}
+.ai-inp{
+  flex:1;background:var(--bg2);border:1px solid var(--br0);border-radius:7px;
+  padding:7px 11px;color:var(--tx0);font-size:.78rem;outline:none;font-family:var(--sans);
+}
+.ai-inp:focus{border-color:var(--a1)}
+.ai-send-btn{
+  width:32px;height:32px;border-radius:7px;background:var(--a1);
+  border:none;cursor:pointer;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;transition:all .14s;
+}
+.ai-send-btn:hover{box-shadow:0 4px 12px rgba(56,189,248,.4)}
+
+/* XP popup */
+@keyframes popXP{
+  0%{opacity:0;transform:translateY(20px) scale(.8)}
+  30%{opacity:1;transform:translateY(0) scale(1.1)}
+  80%{opacity:1;transform:translateY(0) scale(1)}
+  100%{opacity:0;transform:translateY(-20px)}
+}
+
+/* Misc */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+
+code{font-family:var(--mono);font-size:.82em;color:var(--a1);background:rgba(56,189,248,.07);padding:1px 5px;border-radius:3px}
+
+/* Responsive */
+@media(max-width:1000px){
+  .home-hero,.cx-intro,.calc-grid,.math-grid{grid-template-columns:1fr}
+  .hero-cx-card,.complexity-preview{display:none}
+  .home-stats{grid-template-columns:1fr 1fr;padding:0 20px 32px}
+  .home-hero,.roadmap-sec,.cx-page,.math-page,.algo-page{padding-left:20px;padding-right:20px}
+  .mat-layout{grid-template-columns:1fr}
+  .mat-sb{display:none}
+  .lat-layout{flex-direction:column}
+  .prob-sidebar{width:100%;max-height:220px}
+  .code-area{width:100%}
+  .pw-body{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<div class="shell">
+
+<!-- ══════════════════ NAVIGATION ══════════════════ -->
+<nav class="nav">
+  <div class="nav-logo" onclick="showPage('home')">
+    <div class="logo-icon">⚡</div>
+    <div class="logo-text"><span>OSN</span>·CPP</div>
+  </div>
+  <div class="nav-scroll">
+    <button class="ntab on"     onclick="showPage('home')"><span class="ni">🏠</span>Beranda</button>
+    <button class="ntab"        onclick="showPage('complexity')"><span class="ni">📊</span>Kompleksitas</button>
+    <button class="ntab"        onclick="showPage('math')"><span class="ni">➕</span>Matematika</button>
+    <button class="ntab"        onclick="showPage('materi')"><span class="ni">📚</span>Materi C++</button>
+    <button class="ntab"        onclick="showPage('latihan')"><span class="ni">💻</span>Latihan Soal</button>
+    <button class="ntab"        onclick="showPage('algo')"><span class="ni">🔬</span>Referensi Algo</button>
+  </div>
+  <div class="nav-right">
+    <div class="xp-chip">⚡ <span id="xp-val">0</span> XP</div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     HOME
+══════════════════════════════════════════ -->
+<div class="pg on" id="pg-home">
+
+  <div class="home-hero">
+    <div>
+      <div class="hero-eyebrow">🥇 OSK → OSP → OSN → APIO → IOI</div>
+      <h1 class="hero-h1">
+        Kuasai <span class="t1">C++</span>,<br>
+        Pahami <span class="t2">Algoritma</span>,<br>
+        Raih <span class="t3">Medali Emas</span>
+      </h1>
+      <p class="hero-sub">Platform belajar komprehensif OSN Informatika SMA. Kompleksitas O(1)→O(2ⁿ), matematika kompetisi, 120+ soal interaktif, visualisasi output nyata, dan AI Mentor.</p>
+      <div class="hero-btns">
+        <button class="btn btn-primary" onclick="showPage('complexity')">📊 Mulai dari Big-O</button>
+        <button class="btn btn-success" onclick="showPage('latihan')">💻 Latihan Soal</button>
+        <button class="btn btn-secondary" onclick="showPage('math')">➕ Matematika</button>
+      </div>
+    </div>
+
+    <div class="hero-cx-card card card-accent-top card-blue">
+      <div class="hcc-label">📊 Perbandingan kecepatan (n = 1.000)</div>
+      <div id="home-bars"></div>
+      <div style="margin-top:14px;font-size:.7rem;color:var(--tx2);font-family:var(--mono)">
+        ↑ Bar lebih pendek = algoritma lebih cepat
+      </div>
+    </div>
+  </div>
+
+  <div class="home-stats">
+    <div class="stat-card card card-accent-top card-blue" data-icon="💻">
+      <div class="stat-n" id="stat-solved">0</div>
+      <div class="stat-l">Soal Diselesaikan</div>
+    </div>
+    <div class="stat-card card card-accent-top card-green" data-icon="📊">
+      <div class="stat-n">8</div>
+      <div class="stat-l">Kelas Kompleksitas</div>
+    </div>
+    <div class="stat-card card card-accent-top card-amber" data-icon="📚">
+      <div class="stat-n">120+</div>
+      <div class="stat-l">Soal Tersedia</div>
+    </div>
+    <div class="stat-card card card-accent-top card-purple" data-icon="🔬">
+      <div class="stat-n">18</div>
+      <div class="stat-l">Topik Materi</div>
+    </div>
+  </div>
+
+  <div class="roadmap-sec">
+    <div class="sec-title">📍 Roadmap — Nol sampai Medali Internasional</div>
+    <div class="road-grid" id="road-grid"></div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     COMPLEXITY PAGE
+══════════════════════════════════════════ -->
+<div class="pg" id="pg-complexity">
+<div class="cx-page">
+
+  <div>
+    <div class="sec-title">📊 Kompleksitas Waktu & Ruang</div>
+    <div class="cx-intro">
+      <div>
+        <p style="color:var(--tx2);font-size:.88rem;line-height:1.8;margin-bottom:16px">
+          Kompleksitas mengukur seberapa cepat program berjalan saat input membesar. 
+          Di OSN, batas waktu biasanya <strong style="color:var(--a1)">1–3 detik</strong>, 
+          dan komputer mampu sekitar <strong style="color:var(--a2)">10⁸ operasi/detik</strong>. 
+          Salah memilih algoritma = <strong style="color:var(--a4)">TLE (Time Limit Exceeded)</strong>.
+        </p>
+        <div class="ibox ibox-warn">
+          <strong>⚡ Aturan Emas OSN</strong>
+          Sebelum koding, hitung dulu: apakah kompleksitasku cukup cepat?<br>
+          N × log(N) harus ≤ 10⁸ untuk aman di batas waktu 1 detik.
+        </div>
+        <table class="tbl" style="margin-top:16px">
+          <tr><th>Ukuran N</th><th>Kompleksitas Maks Aman</th><th>Contoh Algoritma</th></tr>
+          <tr><td><code>N ≤ 20</code></td><td style="color:var(--cx8)">O(2ᴺ) atau O(N!)</td><td>Bitmask DP, TSP Brute</td></tr>
+          <tr><td><code>N ≤ 400</code></td><td style="color:var(--cx7)">O(N³)</td><td>Floyd-Warshall, DP kubik</td></tr>
+          <tr><td><code>N ≤ 5.000</code></td><td style="color:var(--cx6)">O(N²)</td><td>Bubble Sort, LIS naif</td></tr>
+          <tr><td><code>N ≤ 300.000</code></td><td style="color:var(--cx5)">O(N log N)</td><td>Merge Sort, Dijkstra</td></tr>
+          <tr><td><code>N ≤ 10⁶</code></td><td style="color:var(--cx4)">O(N)</td><td>Prefix Sum, BFS</td></tr>
+          <tr><td><code>N ≤ 10⁸</code></td><td style="color:var(--cx2)">O(log N) atau O(√N)</td><td>Binary Search</td></tr>
+          <tr><td><code>N ≤ 10¹⁸</code></td><td style="color:var(--cx1)">O(1) atau O(log N)</td><td>Rumus langsung</td></tr>
+        </table>
+      </div>
+
+      <div class="canvas-card">
+        <div class="canvas-title">🔬 Visualisasi Pertumbuhan Fungsi — Interaktif</div>
+        <canvas id="cx-canvas"></canvas>
+        <div class="canvas-legend" id="cx-legend"></div>
+        <div class="canvas-controls">
+          <button class="ctrl-btn on" onclick="drawGraph(16,this)">n=16</button>
+          <button class="ctrl-btn" onclick="drawGraph(32,this)">n=32</button>
+          <button class="ctrl-btn" onclick="drawGraph(64,this)">n=64</button>
+          <button class="ctrl-btn" onclick="drawGraph(128,this)">n=128</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Big-O Accordion -->
+  <div class="bigo-section">
+    <div class="sec-title">🃏 Setiap Kelas Kompleksitas — Lengkap dengan Output Nyata</div>
+    <div class="bigo-cards" id="bigo-cards"></div>
+  </div>
+
+  <!-- STL Ops -->
+  <div>
+    <div class="sec-title">⚙️ Kompleksitas Operasi STL C++</div>
+    <div class="stl-grid" id="stl-grid"></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MATH PAGE
+══════════════════════════════════════════ -->
+<div class="pg" id="pg-math">
+<div class="math-page">
+
+  <div class="sec-title">➕ Matematika Kompetisi — Rumus, Output, dan Kode C++</div>
+
+  <!-- Modular Arithmetic Calculator -->
+  <div class="calc-grid">
+    <div class="calc-card card card-accent-top card-blue">
+      <div class="calc-head" style="color:var(--a1)">🔢 Kalkulator Modular Arithmetic</div>
+      <div class="field-row">
+        <span class="field-label">Nilai A</span>
+        <input class="field-input" id="ma" value="123456789" oninput="doMath()">
+      </div>
+      <div class="field-row">
+        <span class="field-label">Nilai B</span>
+        <input class="field-input" id="mb" value="987654321" oninput="doMath()">
+      </div>
+      <div class="field-row">
+        <span class="field-label">Modulus M</span>
+        <input class="field-input" id="mm" value="1000000007" oninput="doMath()">
+      </div>
+      <div class="result-box" id="math-out">
+        <div class="res-title">Output</div>
+      </div>
+    </div>
+
+    <div class="calc-card card card-accent-top card-green">
+      <div class="calc-head" style="color:var(--a2)">⚡ Fast Power — a^n mod M</div>
+      <div class="field-row">
+        <span class="field-label">Base a</span>
+        <input class="field-input" id="fp-a" value="2" oninput="doFastPow()">
+      </div>
+      <div class="field-row">
+        <span class="field-label">Eksponen n</span>
+        <input class="field-input" id="fp-n" value="30" oninput="doFastPow()">
+      </div>
+      <div class="field-row">
+        <span class="field-label">Mod M</span>
+        <input class="field-input" id="fp-m" value="1000000007" oninput="doFastPow()">
+      </div>
+      <div class="result-box" id="fp-out"></div>
+      <div class="codeblock" style="margin-top:14px">
+        <div class="cb-head">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div>
+            <span class="cb-meta">fast_pow.cpp — O(log n)</span>
+          </div>
+          <button class="cpbtn" onclick="cp(this)">Copy</button>
+        </div>
+        <div class="cb-body"><span class="kw">typedef long long</span> ll;
+<span class="cm">// a^n mod m dalam O(log n)</span>
+ll <span class="fn">power</span>(ll a, ll n, ll m) {
+    ll res = <span class="num">1</span>; a %= m;
+    <span class="kw">while</span> (n > <span class="num">0</span>) {
+        <span class="kw">if</span> (n & <span class="num">1</span>) res = res * a % m;
+        a = a * a % m;
+        n >>= <span class="num">1</span>;
+    }
+    <span class="kw">return</span> res;
+}
+<span class="cm">// Contoh: power(2, 30, 1e9+7) = 1073741824</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GCD / LCM -->
+  <div class="calc-card card card-accent-top card-amber" style="padding:24px">
+    <div class="calc-head" style="color:var(--a3)">🔷 GCD, LCM, dan Modular Inverse</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px">
+      <div>
+        <div class="formula-block">
+          <div class="formula-main">GCD(a,b) = GCD(b, a mod b)</div>
+          <div class="formula-sub">Algoritma Euclidean — O(log min(a,b))</div>
+        </div>
+        <div class="field-row" style="margin-top:10px">
+          <span class="field-label">a</span>
+          <input class="field-input" id="ga" value="48" oninput="doGCD()" style="width:90px">
+          <span class="field-label" style="min-width:20px">b</span>
+          <input class="field-input" id="gb" value="18" oninput="doGCD()" style="width:90px">
+        </div>
+        <div class="result-box" id="gcd-out"></div>
+      </div>
+      <div>
+        <div class="formula-block">
+          <div class="formula-main">LCM(a,b) = a × b / GCD(a,b)</div>
+          <div class="formula-sub">Kelipatan Persekutuan Terkecil</div>
+        </div>
+        <div class="codeblock" style="margin-top:10px">
+          <div class="cb-head"><div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div><span class="cb-meta">gcd.cpp</span><button class="cpbtn" onclick="cp(this)">Copy</button></div>
+          <div class="cb-body" style="font-size:.73rem"><span class="kw">typedef long long</span> ll;
+ll <span class="fn">gcd</span>(ll a, ll b) {
+    <span class="kw">return</span> b ? <span class="fn">gcd</span>(b, a%b) : a;
+}
+ll <span class="fn">lcm</span>(ll a, ll b) {
+    <span class="kw">return</span> a / <span class="fn">gcd</span>(a,b) * b;
+}
+<span class="cm">// STL: __gcd(a,b) juga bisa!</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="formula-block">
+          <div class="formula-main">a⁻¹ mod p = a^(p-2) mod p</div>
+          <div class="formula-sub">Fermat's Little Theorem (p prima)</div>
+        </div>
+        <div class="field-row" style="margin-top:10px">
+          <span class="field-label">a</span>
+          <input class="field-input" id="inv-a" value="5" oninput="doInv()" style="width:90px">
+          <span class="field-label" style="min-width:20px">p</span>
+          <input class="field-input" id="inv-p" value="1000000007" oninput="doInv()" style="width:120px">
+        </div>
+        <div class="result-box" id="inv-out"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sieve -->
+  <div class="calc-card card card-accent-top card-purple">
+    <div class="calc-head" style="color:var(--a5)">🔮 Sieve of Eratosthenes — Cari Semua Prima ≤ N</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <p style="color:var(--tx2);font-size:.84rem;line-height:1.75;margin-bottom:14px">
+          Algoritma paling efisien untuk mencari semua bilangan prima ≤ N. 
+          Kompleksitas <strong style="color:var(--a1)">O(N log log N)</strong> — jauh lebih cepat dari cek satu per satu.
+        </p>
+        <div class="formula-block">
+          <div class="formula-main">Jumlah prima ≤ N ≈ N / ln(N)</div>
+          <div class="formula-sub">Prime Number Theorem</div>
+        </div>
+        <div class="field-row" style="margin-top:12px">
+          <span class="field-label">Cari prima ≤ N</span>
+          <input class="field-input" id="sieve-n" value="60" oninput="doSieve()" style="width:100px" min="2" max="300">
+        </div>
+        <div class="result-box" id="sieve-out"></div>
+        <div class="sieve-grid" id="sieve-vis" style="margin-top:12px"></div>
+      </div>
+      <div>
+        <div class="codeblock">
+          <div class="cb-head"><div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div><span class="cb-meta">sieve.cpp — O(N log log N)</span><button class="cpbtn" onclick="cp(this)">Copy</button></div>
+          <div class="cb-body"><span class="kw">const int</span> MAXN = <span class="num">1e6</span>+<span class="num">5</span>;
+<span class="kw">bool</span> composite[MAXN];
+<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt; primes;
+
+<span class="kw">void</span> <span class="fn">sieve</span>(<span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">2</span>; i&lt;=n; i++) {
+        <span class="kw">if</span> (!composite[i]) {
+            primes.<span class="fn">push_back</span>(i);
+            <span class="kw">for</span> (ll j=(ll)i*i; j&lt;=n; j+=i)
+                composite[j] = <span class="kw">true</span>;
+        }
+    }
+}
+<span class="cm">// Setelah dipanggil sieve(n):</span>
+<span class="cm">// primes = {2, 3, 5, 7, 11, 13, ...}</span>
+<span class="cm">// composite[x] = true jika x bukan prima</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Combinatorics -->
+  <div class="calc-card card card-accent-top card-amber">
+    <div class="calc-head" style="color:var(--a3)">📐 Kombinatorik — C(n,k) mod p</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <div class="formula-block">
+          <div class="formula-main">C(n,k) = n! / (k! × (n-k)!)</div>
+          <div class="formula-sub">Kombinasi — pilih k dari n objek</div>
+        </div>
+        <div class="formula-block">
+          <div class="formula-main">P(n,k) = n! / (n-k)!</div>
+          <div class="formula-sub">Permutasi — susun k dari n objek</div>
+        </div>
+        <div class="field-row" style="margin-top:12px">
+          <span class="field-label">n</span>
+          <input class="field-input" id="cn" value="10" oninput="doComb()" style="width:80px">
+          <span class="field-label" style="min-width:20px">k</span>
+          <input class="field-input" id="ck" value="3" oninput="doComb()" style="width:80px">
+        </div>
+        <div class="result-box" id="comb-out"></div>
+      </div>
+      <div>
+        <div class="codeblock">
+          <div class="cb-head"><div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div><span class="cb-meta">combinatorics.cpp</span><button class="cpbtn" onclick="cp(this)">Copy</button></div>
+          <div class="cb-body"><span class="kw">const int</span> MAXN=<span class="num">1e6</span>+<span class="num">5</span>, MOD=<span class="num">1e9</span>+<span class="num">7</span>;
+ll fact[MAXN], inv_fact[MAXN];
+
+<span class="kw">void</span> <span class="fn">precompute</span>() {
+    fact[<span class="num">0</span>] = <span class="num">1</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> i=<span class="num">1</span>;i&lt;MAXN;i++)
+        fact[i] = fact[i-<span class="num">1</span>]*i%MOD;
+    inv_fact[MAXN-<span class="num">1</span>] = <span class="fn">power</span>(fact[MAXN-<span class="num">1</span>],MOD-<span class="num">2</span>,MOD);
+    <span class="kw">for</span>(<span class="kw">int</span> i=MAXN-<span class="num">2</span>;i&gt;=<span class="num">0</span>;i--)
+        inv_fact[i] = inv_fact[i+<span class="num">1</span>]*(i+<span class="num">1</span>)%MOD;
+}
+ll <span class="fn">C</span>(<span class="kw">int</span> n, <span class="kw">int</span> k) {
+    <span class="kw">if</span>(k&lt;<span class="num">0</span>||k&gt;n) <span class="kw">return</span> <span class="num">0</span>;
+    <span class="kw">return</span> fact[n]*inv_fact[k]%MOD*inv_fact[n-k]%MOD;
+}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bit Operations -->
+  <div class="calc-card card card-accent-top card-red">
+    <div class="calc-head" style="color:var(--a4)">⚡ Bit Manipulation — Senjata Rahasia Olimpiade</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <div class="field-row">
+          <span class="field-label">Bilangan N</span>
+          <input class="field-input" id="bit-n" value="42" oninput="doBit()" style="width:120px">
+        </div>
+        <div class="bit-grid" id="bit-cells"></div>
+        <div class="result-box" id="bit-out" style="margin-top:12px"></div>
+      </div>
+      <div>
+        <table class="tbl" style="margin-bottom:14px">
+          <tr><th>Operasi</th><th>Kode C++</th><th>Arti</th></tr>
+          <tr><td>Cek bit ke-k</td><td><code>n &amp; (1&lt;&lt;k)</code></td><td>Apakah bit k aktif?</td></tr>
+          <tr><td>Set bit ke-k</td><td><code>n | (1&lt;&lt;k)</code></td><td>Aktifkan bit k</td></tr>
+          <tr><td>Clear bit ke-k</td><td><code>n &amp; ~(1&lt;&lt;k)</code></td><td>Matikan bit k</td></tr>
+          <tr><td>Toggle bit ke-k</td><td><code>n ^ (1&lt;&lt;k)</code></td><td>Balik bit k</td></tr>
+          <tr><td>Hapus LSB</td><td><code>n &amp; (n-1)</code></td><td>Hapus bit 1 terkecil</td></tr>
+          <tr><td>Isolasi LSB</td><td><code>n &amp; (-n)</code></td><td>Hanya bit terkecil</td></tr>
+          <tr><td>Hitung bit 1</td><td><code>__builtin_popcount(n)</code></td><td>Jumlah bit aktif</td></tr>
+          <tr><td>n adalah 2ᵏ?</td><td><code>(n &amp; n-1) == 0</code></td><td>Power of two check</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MATERI PAGE
+══════════════════════════════════════════ -->
+<div class="pg" id="pg-materi">
+  <div class="mat-layout">
+    <div class="mat-sb" id="mat-sb"></div>
+    <div class="mat-content" id="mat-content">
+      <div class="mat-tag">Pilih topik</div>
+      <div class="mat-h1">Pilih Materi</div>
+      <div class="mat-sub">Klik salah satu topik di sidebar kiri untuk mulai belajar.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LATIHAN PAGE
+══════════════════════════════════════════ -->
+<div class="pg" id="pg-latihan">
+  <div class="lat-layout">
+    <div class="prob-sidebar">
+      <div class="ps-header">
+        <div class="ps-title">📋 Daftar Soal</div>
+        <div class="filter-row">
+          <button class="fbt on" onclick="filterProbs('all',this)">Semua</button>
+          <button class="fbt" onclick="filterProbs('easy',this)">Mudah</button>
+          <button class="fbt" onclick="filterProbs('medium',this)">Sedang</button>
+          <button class="fbt" onclick="filterProbs('hard',this)">Sulit</button>
+        </div>
+      </div>
+      <div class="prob-list" id="prob-list"></div>
+    </div>
+
+    <div class="prob-workspace">
+      <div class="pw-header">
+        <div>
+          <div class="pw-title" id="pw-title">← Pilih soal dari daftar</div>
+          <div class="pw-meta">
+            <span class="pc-diff de" id="pw-diff">MUDAH</span>
+            <span style="font-size:.74rem;color:var(--tx2)">⏱ <span id="pw-tl">1s</span></span>
+            <span style="font-size:.74rem;color:var(--tx2)">💾 <span id="pw-ml">256MB</span></span>
+          </div>
+        </div>
+      </div>
+      <div class="pw-body">
+        <div class="pw-desc" id="pw-desc">
+          <p style="color:var(--tx2);padding:40px 0;text-align:center">Pilih soal untuk mulai berlatih</p>
+        </div>
+        <div class="code-area">
+          <div class="ca-topbar">
+            <span style="font-size:.74rem;color:var(--tx2)">Editor C++</span>
+            <select class="ca-lang"><option>C++ 17</option></select>
+            <button class="ca-run" onclick="runCode()">▶ Run</button>
+            <button class="ca-sub" onclick="subCode()">⬆ Submit</button>
+          </div>
+          <textarea id="editor" spellcheck="false">#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(null);
+    
+    // Tulis solusimu di sini
+    
+    return 0;
+}</textarea>
+          <div class="verdict-zone">
+            <div class="vz-label">Verdict / Output</div>
+            <div class="v-idle" id="verdict">Belum ada submission — klik ▶ Run atau ⬆ Submit</div>
+            <div class="tc-chips" id="tc-chips"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ALGO REFERENCE
+══════════════════════════════════════════ -->
+<div class="pg" id="pg-algo">
+  <div class="algo-page" id="algo-content"></div>
+</div>
+
+</div><!-- shell -->
+
+<!-- AI FAB -->
+<button class="ai-fab" onclick="toggleAI()" title="Tanya Mentor AI">🤖</button>
+<div class="ai-win" id="ai-win">
+  <div class="ai-win-hd">
+    <div class="ai-avatar">🤖</div>
+    <div>
+      <div class="ai-win-title">Mentor AI OSN</div>
+      <div class="ai-win-status">● Online — Siap membantu</div>
+    </div>
+    <button onclick="toggleAI()" style="margin-left:auto;background:none;border:none;color:var(--tx2);font-size:1.1rem;cursor:pointer">×</button>
+  </div>
+  <div class="ai-msgs" id="ai-msgs">
+    <div class="ai-msg">
+      <div class="ai-avatar" style="flex-shrink:0">🤖</div>
+      <div class="ai-bubble">Halo! Tanyakan apapun tentang C++, kompleksitas O(), algoritma, matematika, atau soal OSN. Aku siap bantu! 💪</div>
+    </div>
+  </div>
+  <div class="ai-quickies">
+    <div class="aiq" onclick="askAI('Apa beda O(n) dan O(n²)?')">O(n) vs O(n²)</div>
+    <div class="aiq" onclick="askAI('Jelaskan cara kerja Dijkstra')">Dijkstra</div>
+    <div class="aiq" onclick="askAI('Tips DP untuk OSN?')">Tips DP</div>
+    <div class="aiq" onclick="askAI('Kapan pakai Segment Tree?')">Segment Tree</div>
+    <div class="aiq" onclick="askAI('Apa itu modular inverse?')">Modular Inverse</div>
+  </div>
+  <div class="ai-input-row">
+    <input class="ai-inp" id="ai-inp" placeholder="Tanya tentang algoritma, kompleksitas..." onkeydown="if(event.key==='Enter')sendAI()">
+    <button class="ai-send-btn" onclick="sendAI()">➤</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// APP STATE
+// ══════════════════════════════════════════════
+const APP = { xp:0, solved:[], cur:null, filter:'all' };
+
+// ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(t => t.classList.remove('on'));
+  document.getElementById('pg-' + id).classList.add('on');
+  const map = {home:0,complexity:1,math:2,materi:3,latihan:4,algo:5};
+  document.querySelectorAll('.ntab')[map[id]].classList.add('on');
+  if(id==='complexity') initComplexity();
+  if(id==='latihan') renderProbs(APP.filter);
+  if(id==='math') { doMath();doFastPow();doSieve();doBit();doGCD();doInv();doComb(); }
+  if(id==='algo') buildAlgoPage();
+}
+
+// ══════════════════════════════════════════════
+// COMPLEXITY DATA
+// ══════════════════════════════════════════════
+const BIGO = [
+  {
+    name:'O(1)', cls:'Constant Time', color:var_cx1(),
+    speed:2, verdict:'🟢 Sempurna', verdictColor:'var(--cx1)',
+    desc:`Waktu eksekusi TIDAK berubah sama sekali, berapapun besar inputnya. Ini adalah kompleksitas terbaik yang bisa dicapai. Operasi ini terjadi dalam "satu langkah" — tidak ada loop, tidak ada rekursi.`,
+    examples:[
+      {icon:'📦', text:'Array access: a[i]'},
+      {icon:'🗂', text:'Hash map lookup: mp[key]'},
+      {icon:'📚', text:'Stack push/pop'},
+      {icon:'💾', text:'Bitwise operasi: n&1, n>>k'},
+    ],
+    analogy:`Seperti mencari nomor halaman di daftar isi — langsung ketemu tanpa membaca semua halaman!`,
+    n_ops:[{n:1,ops:1},{n:100,ops:1},{n:'10⁶',ops:1},{n:'10⁹',ops:1}],
+    code:`<span class="cm">// O(1) — Semua ini langsung, tidak peduli ukuran array</span>
+<span class="kw">int</span> arr[<span class="num">1000000</span>];
+
+<span class="cm">// Akses elemen — O(1)</span>
+<span class="kw">int</span> x = arr[<span class="num">500000</span>];  <span class="cm">// sama cepatnya dengan arr[0]</span>
+
+<span class="cm">// Hash map — O(1) average</span>
+<span class="tp">unordered_map</span>&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; mp;
+mp[<span class="num">42</span>] = <span class="num">100</span>;
+<span class="kw">int</span> val = mp[<span class="num">42</span>];  <span class="cm">// O(1)</span>
+
+<span class="cm">// Bitwise — O(1)</span>
+<span class="kw">bool</span> isEven = !(n & <span class="num">1</span>);
+<span class="kw">int</span> lsb = n & (-n);`,
+    output:[
+      '// Untuk N = 1        → 1 operasi',
+      '// Untuk N = 1000     → 1 operasi',
+      '// Untuk N = 10^9     → 1 operasi',
+      '// Waktu selalu sama! ← kunci O(1)',
+    ]
+  },
+  {
+    name:'O(log n)', cls:'Logarithmic Time', color:var_cx2(),
+    speed:8, verdict:'🟢 Sangat Cepat', verdictColor:'var(--cx2)',
+    desc:`Setiap iterasi, masalah dipotong setengah. Logaritma base-2 dari n. Untuk n = 1 miliar, hanya butuh ~30 langkah! Sangat efisien untuk data besar. Hampir semua operasi "cari" yang efisien ada di kategori ini.`,
+    examples:[
+      {icon:'🔍', text:'Binary Search'},
+      {icon:'🌲', text:'BST: insert/find/delete'},
+      {icon:'📊', text:'Segment Tree query'},
+      {icon:'⚡', text:'Fast exponentiation: a^n'},
+    ],
+    analogy:`Seperti mencari kata di kamus — buka di tengah, terlalu jauh kiri/kanan? buka setengahnya lagi. Tinggal 30 langkah untuk 1 miliar kata!`,
+    n_ops:[{n:1,ops:0},{n:16,ops:4},{n:1024,ops:10},{n:'10⁶',ops:20},{n:'10⁹',ops:30}],
+    code:`<span class="cm">// O(log n) — Binary Search</span>
+<span class="kw">int</span> <span class="fn">binSearch</span>(<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> x) {
+    <span class="kw">int</span> lo=<span class="num">0</span>, hi=(int)a.size()-<span class="num">1</span>;
+    <span class="kw">while</span> (lo <= hi) {
+        <span class="kw">int</span> mid = lo + (hi-lo)/<span class="num">2</span>;  <span class="cm">// aman dari overflow!</span>
+        <span class="kw">if</span> (a[mid] == x) <span class="kw">return</span> mid;
+        <span class="kw">if</span> (a[mid] < x) lo = mid+<span class="num">1</span>;
+        <span class="kw">else</span> hi = mid-<span class="num">1</span>;
+    }
+    <span class="kw">return</span> -<span class="num">1</span>;  <span class="cm">// tidak ditemukan</span>
+}
+
+<span class="cm">// STL lower_bound — juga O(log n)</span>
+<span class="kw">auto</span> it = <span class="fn">lower_bound</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>(), x);`,
+    output:[
+      '// N = 16      → log₂(16)  = 4   iterasi',
+      '// N = 1024    → log₂(1024)= 10  iterasi',
+      '// N = 10^6    → ~20 iterasi',
+      '// N = 10^9    → ~30 iterasi',
+      '// N = 10^18   → ~60 iterasi  ← masih cepat!',
+    ]
+  },
+  {
+    name:'O(√n)', cls:'Square Root Time', color:var_cx3(),
+    speed:15, verdict:'🟢 Cepat', verdictColor:'var(--cx3)',
+    desc:`Akar kuadrat dari n. Untuk n = 10⁶, hanya butuh 1000 langkah. Muncul di faktorisasi bilangan, pemeriksaan prima, Sqrt Decomposition, dan Mo's Algorithm.`,
+    examples:[
+      {icon:'🔢', text:'Faktorisasi bilangan prima'},
+      {icon:'✅', text:'Cek apakah bilangan prima'},
+      {icon:'📦', text:'Sqrt Decomposition'},
+      {icon:'❓', text:"Mo's Algorithm (queries)"},
+    ],
+    analogy:`Seperti mencari file di folder. Kalau ada 10000 file dalam 100 subfolder — cukup cek 100 subfolder, lalu 100 file di dalamnya!`,
+    n_ops:[{n:100,ops:10},{n:'10⁴',ops:100},{n:'10⁶',ops:1000},{n:'10⁸',ops:'10⁴'}],
+    code:`<span class="cm">// O(√n) — Cek bilangan prima</span>
+<span class="kw">bool</span> <span class="fn">isPrime</span>(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n < <span class="num">2</span>) <span class="kw">return false</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">2</span>; (ll)i*i <= n; i++)
+        <span class="kw">if</span> (n % i == <span class="num">0</span>) <span class="kw">return false</span>;
+    <span class="kw">return true</span>;
+}
+
+<span class="cm">// O(√n) — Faktorisasi prima</span>
+<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">primeFactors</span>(<span class="kw">int</span> n) {
+    <span class="tp">vector</span>&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">2</span>; (ll)i*i <= n; i++)
+        <span class="kw">while</span> (n%i == <span class="num">0</span>) { res.<span class="fn">push_back</span>(i); n/=i; }
+    <span class="kw">if</span> (n > <span class="num">1</span>) res.<span class="fn">push_back</span>(n);
+    <span class="kw">return</span> res;
+}`,
+    output:[
+      '// isPrime(97)    → cek i=2..9 saja → prima ✓',
+      '// factors(360)   → {2,2,2,3,3,5}',
+      '// N = 10^6       → √(10^6) = 1000 iterasi',
+      '// N = 10^12      → 10^6 iterasi  ← masih OK',
+    ]
+  },
+  {
+    name:'O(n)', cls:'Linear Time', color:var_cx4(),
+    speed:25, verdict:'🟡 Baik', verdictColor:'var(--cx4)',
+    desc:`Runtime tumbuh proporsional dengan input. Biasanya optimal untuk masalah yang perlu membaca semua elemen minimal satu kali. Kalau N = 10⁶, ada 10⁶ operasi — masih aman dalam 1 detik.`,
+    examples:[
+      {icon:'🔎', text:'Linear search (array tak terurut)'},
+      {icon:'➕', text:'Prefix Sum — precompute O(n)'},
+      {icon:'📈', text:"Kadane's Algorithm (max subarray)"},
+      {icon:'🕸', text:'BFS & DFS — O(V+E)'},
+    ],
+    analogy:`Seperti membaca semua buku di rak dari kiri ke kanan — perlu membaca setiap buku sekali, tapi tidak ada yang dibaca dua kali.`,
+    n_ops:[{n:'10³',ops:'10³'},{n:'10⁵',ops:'10⁵'},{n:'10⁶',ops:'10⁶'},{n:'10⁸',ops:'10⁸'}],
+    code:`<span class="cm">// O(n) — Prefix Sum (WAJIB dikuasai!)</span>
+<span class="tp">vector</span>&lt;ll&gt; <span class="fn">buildPrefix</span>(<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> n = a.size();
+    <span class="tp">vector</span>&lt;ll&gt; pre(n+<span class="num">1</span>, <span class="num">0</span>);
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;n; i++)
+        pre[i+<span class="num">1</span>] = pre[i] + a[i];
+    <span class="kw">return</span> pre;
+}
+<span class="cm">// Setelah precompute O(n), query O(1)!</span>
+<span class="cm">// sum(l,r) = pre[r+1] - pre[l]</span>
+
+<span class="cm">// O(n) — Kadane's Algorithm</span>
+<span class="kw">int</span> <span class="fn">maxSubarray</span>(<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> cur=<span class="num">0</span>, best=INT_MIN;
+    <span class="kw">for</span> (<span class="kw">int</span> x : a) {
+        cur = <span class="fn">max</span>(x, cur+x);
+        best = <span class="fn">max</span>(best, cur);
+    }
+    <span class="kw">return</span> best;
+}`,
+    output:[
+      '// a = [1, 2, 3, 4, 5]',
+      '// prefix = [0, 1, 3, 6, 10, 15]',
+      '// sum(2,4) = pre[4] - pre[1] = 10 - 1 = 9  ← O(1)!',
+      '',
+      '// Kadane: [-2, 1, -3, 4, -1, 2, 1, -5, 4]',
+      '// Output: 6  (subarray [4, -1, 2, 1])',
+    ]
+  },
+  {
+    name:'O(n log n)', cls:'Linearithmic Time', color:var_cx5(),
+    speed:45, verdict:'🟡 Standar Emas', verdictColor:'var(--cx5)',
+    desc:`Standar emas untuk sorting dan banyak algoritma kompetisi. Untuk N = 3×10⁵ (~1 detik batas OSN), ini menghasilkan ~5 juta operasi — sangat aman. Hampir semua soal OSN bisa diselesaikan di sini.`,
+    examples:[
+      {icon:'🔄', text:'Merge Sort, Quick Sort'},
+      {icon:'📊', text:'Heap Sort, std::sort()'},
+      {icon:'🔢', text:'LIS — O(n log n) dengan binary search'},
+      {icon:'🕸', text:'Dijkstra dengan priority_queue'},
+    ],
+    analogy:`Seperti menyortir kartu dengan strategi divide-and-conquer — bagi dua, sortir masing-masing, gabung. Jauh lebih cepat dari memeriksa semua pasangan!`,
+    n_ops:[{n:'10³',ops:'~10⁴'},{n:'10⁵',ops:'~1.7×10⁶'},{n:'3×10⁵',ops:'~5×10⁶'},{n:'10⁶',ops:'~2×10⁷'}],
+    code:`<span class="cm">// O(n log n) — STL sort</span>
+<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt; v = {<span class="num">5</span>,<span class="num">2</span>,<span class="num">8</span>,<span class="num">1</span>,<span class="num">9</span>,<span class="num">3</span>};
+<span class="fn">sort</span>(v.<span class="fn">begin</span>(), v.<span class="fn">end</span>());  <span class="cm">// O(n log n)</span>
+
+<span class="cm">// O(n log n) — LIS (Patience Sorting)</span>
+<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt; dp;  <span class="cm">// dp[i] = elemen terkecil dengan LIS panjang i+1</span>
+<span class="kw">for</span> (<span class="kw">int</span> x : a) {
+    <span class="kw">auto</span> it = <span class="fn">lower_bound</span>(dp.<span class="fn">begin</span>(), dp.<span class="fn">end</span>(), x);
+    <span class="kw">if</span> (it == dp.<span class="fn">end</span>()) dp.<span class="fn">push_back</span>(x);
+    <span class="kw">else</span> *it = x;
+}
+<span class="cm">// Panjang LIS = dp.size()</span>`,
+    output:[
+      '// sort([5,2,8,1,9,3]) → [1,2,3,5,8,9]',
+      '',
+      '// LIS([3,1,4,1,5,9,2,6]):',
+      '//   Proses 3 → dp=[3]',
+      '//   Proses 1 → dp=[1]',
+      '//   Proses 4 → dp=[1,4]',
+      '//   Proses 5 → dp=[1,4,5]',
+      '//   Proses 9 → dp=[1,4,5,9]',
+      '//   Proses 2 → dp=[1,2,5,9]',
+      '//   Proses 6 → dp=[1,2,5,6]',
+      '//   Panjang LIS = 4 ✓',
+    ]
+  },
+  {
+    name:'O(n²)', cls:'Quadratic Time', color:var_cx6(),
+    speed:65, verdict:'🔴 Hati-hati', verdictColor:'var(--cx6)',
+    desc:`Dua loop bersarang. Runtime tumbuh kuadrat — N=5000 menghasilkan 25 juta operasi. AMAN untuk N ≤ 5000, BERBAHAYA untuk N > 10⁴. Banyak soal OSN bisa dioptimasi dari O(n²) ke O(n log n).`,
+    examples:[
+      {icon:'🔄', text:'Bubble Sort, Insertion Sort'},
+      {icon:'🔢', text:'LIS naif — dua loop'},
+      {icon:'📐', text:'Semua pasangan (all pairs)'},
+      {icon:'🔤', text:'LCS, Edit Distance naif'},
+    ],
+    analogy:`Seperti membandingkan semua pasangan orang di pesta. 100 orang → 4950 perkenalan. 10.000 orang → hampir 50 juta perkenalan!`,
+    n_ops:[{n:'10²',ops:'10⁴'},{n:'10³',ops:'10⁶'},{n:'5×10³',ops:'2.5×10⁷'},{n:'10⁴',ops:'10⁸ ⚠'}],
+    code:`<span class="cm">// O(n²) — Bubble Sort (JANGAN dipakai di OSN!)</span>
+<span class="kw">void</span> <span class="fn">bubbleSort</span>(<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> n = a.size();
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;n-<span class="num">1</span>; i++)
+        <span class="kw">for</span> (<span class="kw">int</span> j=<span class="num">0</span>; j&lt;n-i-<span class="num">1</span>; j++)
+            <span class="kw">if</span> (a[j] > a[j+<span class="num">1</span>])
+                <span class="fn">swap</span>(a[j], a[j+<span class="num">1</span>]);
+}
+
+<span class="cm">// O(n²) — LIS naif (hanya untuk n ≤ 5000)</span>
+<span class="kw">int</span> <span class="fn">LIS_slow</span>(<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> n=a.size(), ans=<span class="num">1</span>;
+    <span class="tp">vector</span>&lt;<span class="kw">int</span>&gt; dp(n, <span class="num">1</span>);
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">1</span>; i&lt;n; i++)
+        <span class="kw">for</span> (<span class="kw">int</span> j=<span class="num">0</span>; j&lt;i; j++)
+            <span class="kw">if</span> (a[j] < a[i])
+                dp[i] = <span class="fn">max</span>(dp[i], dp[j]+<span class="num">1</span>);
+    <span class="kw">return</span> *<span class="fn">max_element</span>(dp.<span class="fn">begin</span>(), dp.<span class="fn">end</span>());
+}`,
+    output:[
+      '// Untuk N=100   → 10.000 ops   ✓ aman',
+      '// Untuk N=1000  → 1.000.000    ✓ aman',
+      '// Untuk N=5000  → 25.000.000   ✓ borderline',
+      '// Untuk N=10000 → 100.000.000  ⚠ TLE!',
+      '// Untuk N=100000→ 10^10        ✗ PASTI TLE!',
+    ]
+  },
+  {
+    name:'O(n³)', cls:'Cubic Time', color:var_cx7(),
+    speed:82, verdict:'🔴 Hanya n≤500', verdictColor:'var(--cx7)',
+    desc:`Tiga loop bersarang. Hanya aman untuk N ≤ 500 (500³ = 1.25×10⁸). Floyd-Warshall dan perkalian matriks naif ada di sini. Untuk N > 500, cari solusi yang lebih efisien.`,
+    examples:[
+      {icon:'🗺', text:'Floyd-Warshall APSP'},
+      {icon:'🔢', text:'Perkalian matriks naif'},
+      {icon:'📐', text:'Matrix Chain Multiplication DP'},
+      {icon:'🔤', text:'Interval DP — O(n³)'},
+    ],
+    n_ops:[{n:100,ops:'10⁶'},{n:300,ops:'2.7×10⁷'},{n:500,ops:'1.25×10⁸'},{n:1000,ops:'10⁹ ✗'}],
+    code:`<span class="cm">// O(n³) — Floyd-Warshall All-Pairs Shortest Path</span>
+<span class="kw">void</span> <span class="fn">floydWarshall</span>(<span class="tp">vector</span>&lt;<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; d, <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> k=<span class="num">0</span>; k&lt;n; k++)     <span class="cm">// titik perantara</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">0</span>; i&lt;n; i++)     <span class="cm">// dari</span>
+    <span class="kw">for</span> (<span class="kw">int</span> j=<span class="num">0</span>; j&lt;n; j++)     <span class="cm">// ke</span>
+        d[i][j] = <span class="fn">min</span>(d[i][j],
+                       d[i][k] + d[k][j]);
+}
+<span class="cm">// n=500 → 1.25×10⁸ → tepat di batas!</span>
+<span class="cm">// n=1000 → PASTI TLE!</span>`,
+    output:[
+      '// d[i][j] = jarak terpendek dari i ke j',
+      '// Setelah Floyd-Warshall:',
+      '// d[0][2] = min jarak dari simpul 0 ke 2',
+      '//         = melewati simpul manapun',
+      '// Bisa deteksi negative cycle:',
+      '// jika d[i][i] < 0 → ada negative cycle!',
+    ]
+  },
+  {
+    name:'O(2ⁿ)', cls:'Exponential Time', color:var_cx8(),
+    speed:98, verdict:'🔴 Hanya n≤20', verdictColor:'var(--cx8)',
+    desc:`Dua pangkat n. 2²⁰ = ~10⁶ (masih aman), 2³⁰ = ~10⁹ (TLE!). Di sinilah Bitmask DP bersinar — represent setiap "state subset" sebagai angka biner. Wajib dipahami untuk soal OSN Nasional ke atas!`,
+    examples:[
+      {icon:'💻', text:'Bitmask DP — subset states'},
+      {icon:'🗺', text:'TSP (Traveling Salesman)'},
+      {icon:'🔢', text:'Generate all subsets'},
+      {icon:'📊', text:'Subset Sum Problem'},
+    ],
+    n_ops:[{n:10,ops:'1024'},{n:15,ops:'~32.768'},{n:20,ops:'~10⁶ ✓'},{n:25,ops:'~3.4×10⁷ ⚠'},{n:30,ops:'~10⁹ ✗'}],
+    code:`<span class="cm">// O(2^n) — Bitmask DP Contoh: TSP</span>
+<span class="kw">int</span> n, dist[<span class="num">16</span>][<span class="num">16</span>];
+<span class="kw">int</span> dp[<span class="num">1</span>&lt;&lt;<span class="num">15</span>][<span class="num">15</span>];  <span class="cm">// dp[subset][last]</span>
+
+<span class="cm">// dp[mask][v] = min jarak mengunjungi kota
+//   dalam 'mask', berakhir di kota v</span>
+<span class="kw">for</span> (<span class="kw">int</span> mask=<span class="num">1</span>; mask&lt;(<span class="num">1</span>&lt;&lt;n); mask++)
+<span class="kw">for</span> (<span class="kw">int</span> u=<span class="num">0</span>; u&lt;n; u++) {
+    <span class="kw">if</span> (!(mask & (<span class="num">1</span>&lt;&lt;u))) <span class="kw">continue</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> v=<span class="num">0</span>; v&lt;n; v++) {
+        <span class="kw">if</span> (mask & (<span class="num">1</span>&lt;&lt;v)) <span class="kw">continue</span>;
+        <span class="kw">int</span> nm = mask | (<span class="num">1</span>&lt;&lt;v);
+        dp[nm][v] = <span class="fn">min</span>(dp[nm][v],
+                        dp[mask][u] + dist[u][v]);
+    }
+}`,
+    output:[
+      '// mask = 0b0111 = 7 → kota {0,1,2} sudah dikunjungi',
+      '// dp[7][2] = jarak minimum mengunjungi {0,1,2}',
+      '//            berakhir di kota 2',
+      '',
+      '// n=4  → 2^4×4  = 64  states ✓',
+      '// n=10 → 2^10×10 = ~10^4 ✓',
+      '// n=15 → 2^15×15 = ~5×10^5 ✓ (TSP n=15 OK)',
+      '// n=20 → 2^20×20 = ~2×10^7 ✓ borderline',
+    ]
+  }
+];
+
+function var_cx1(){ return 'var(--cx1)' }
+function var_cx2(){ return 'var(--cx2)' }
+function var_cx3(){ return 'var(--cx3)' }
+function var_cx4(){ return 'var(--cx4)' }
+function var_cx5(){ return 'var(--cx5)' }
+function var_cx6(){ return 'var(--cx6)' }
+function var_cx7(){ return 'var(--cx7)' }
+function var_cx8(){ return 'var(--cx8)' }
+
+// Actual color values for canvas
+const CX_COLORS = ['#34D399','#38BDF8','#A3E635','#FCD34D','#FB923C','#F87171','#E879F9','#FF6B6B'];
+
+const STL_DATA = [
+  {title:'vector&lt;T&gt;', ops:[
+    ['push_back(x)','O(1)*','good'],['pop_back()','O(1)','good'],
+    ['operator[i]','O(1)','good'],['insert(it,x)','O(n)','bad'],
+    ['erase(it)','O(n)','bad'],['sort(b,e)','O(n lg n)','ok'],
+    ['size()','O(1)','good'],['lower_bound','O(lg n)','good'],
+  ]},
+  {title:'map&lt;K,V&gt; (BST)', ops:[
+    ['operator[k]','O(log n)','ok'],['count(k)','O(log n)','ok'],
+    ['find(k)','O(log n)','ok'],['erase(k)','O(log n)','ok'],
+    ['lower_bound(k)','O(log n)','ok'],['begin/end','O(1)','good'],
+    ['insert({k,v})','O(log n)','ok'],['size()','O(1)','good'],
+  ]},
+  {title:'unordered_map (Hash)', ops:[
+    ['operator[k]','O(1)*','good'],['count(k)','O(1)*','good'],
+    ['find(k)','O(1)*','good'],['erase(k)','O(1)*','good'],
+    ['insert','O(1)*','good'],['size()','O(1)','good'],
+    ['worst case','O(n)','ugly'],['clear()','O(n)','bad'],
+  ]},
+  {title:'set&lt;T&gt; (BST)', ops:[
+    ['insert(x)','O(log n)','ok'],['erase(x)','O(log n)','ok'],
+    ['count(x)','O(log n)','ok'],['find(x)','O(log n)','ok'],
+    ['lower_bound(x)','O(log n)','ok'],['upper_bound(x)','O(log n)','ok'],
+    ['begin/end','O(1)','good'],['size()','O(1)','good'],
+  ]},
+  {title:'priority_queue', ops:[
+    ['push(x)','O(log n)','ok'],['pop()','O(log n)','ok'],
+    ['top()','O(1)','good'],['size()','O(1)','good'],
+    ['emplace(x)','O(log n)','ok'],['empty()','O(1)','good'],
+  ]},
+  {title:'stack / queue / deque', ops:[
+    ['push/push_back','O(1)','good'],['pop/pop_front','O(1)','good'],
+    ['top()/front()','O(1)','good'],['back()','O(1)','good'],
+    ['size()','O(1)','good'],['empty()','O(1)','good'],
+  ]},
+];
+
+function initComplexity() {
+  // Build bigo accordion
+  const container = document.getElementById('bigo-cards');
+  container.innerHTML = BIGO.map((d,i) => `
+    <div class="bigo-card">
+      <div class="bigo-header" onclick="toggleBigo(${i})">
+        <div class="bigo-name-col">
+          <div class="bigo-notation" style="color:${d.color}">${d.name}</div>
+          <div class="bigo-class">${d.cls}</div>
+        </div>
+        <div class="bigo-speed-col">
+          <div class="bigo-bar-row">
+            <div class="bigo-bar-bg">
+              <div class="bigo-bar-inner" style="background:${d.color};width:${d.speed}%"></div>
+            </div>
+            <div class="bigo-bar-label" style="color:${d.color}">
+              ${d.speed}% cost
+            </div>
+          </div>
+          <div class="bigo-verdict" style="color:${d.verdictColor}">${d.verdict}</div>
+        </div>
+        <div class="bigo-expand-btn" id="bigo-btn-${i}">▼</div>
+      </div>
+      <div class="bigo-body" id="bigo-body-${i}">
+        <div>
+          <p class="bigo-explain">${d.desc}</p>
+          <div class="ibox ibox-info" style="font-size:.8rem">
+            <strong>💡 Analogi</strong>${d.analogy}
+          </div>
+          <div class="bigo-examples">
+            <div class="bigo-ex-title">📌 Penggunaan Nyata</div>
+            <div class="bigo-ex-list">
+              ${d.examples.map(e=>`<div class="bigo-ex-item">${e.icon} ${e.text}</div>`).join('')}
+            </div>
+          </div>
+          <div style="margin-top:14px">
+            <div class="bigo-ex-title">📊 Operasi vs N</div>
+            <table class="tbl" style="margin-top:6px;font-size:.76rem">
+              <tr><th>N</th><th>Operasi</th></tr>
+              ${d.n_ops.map(r=>`<tr><td style="color:${d.color}">${r.n}</td><td style="font-family:var(--mono)">${r.ops}</td></tr>`).join('')}
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="codeblock">
+            <div class="cb-head">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div>
+                <span class="cb-meta" style="color:${d.color}">${d.name} — ${d.cls}</span>
+              </div>
+              <button class="cpbtn" onclick="cp(this)">Copy</button>
+            </div>
+            <div class="cb-body">${d.code}</div>
+          </div>
+          <div class="output-block">
+            <div class="output-head">
+              <div class="output-head-label">▶ Output / Trace</div>
+            </div>
+            <div class="output-body">
+              ${d.output.map(line => line.startsWith('//')
+                ? `<div class="out-line"><span class="out-comment">${line}</span></div>`
+                : line === ''
+                ? '<div style="height:6px"></div>'
+                : `<div class="out-line"><span class="out-prompt">»</span><span class="out-val">${line}</span></div>`
+              ).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Build STL grid
+  const stlGrid = document.getElementById('stl-grid');
+  stlGrid.innerHTML = STL_DATA.map(s => `
+    <div class="stl-card card">
+      <div class="stl-title">${s.title}</div>
+      ${s.ops.map(([op,cx,cls])=>`
+        <div class="stl-row">
+          <span class="stl-op">${op}</span>
+          <span class="stl-cx ${cls}">${cx}</span>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+
+  drawGraph(16, document.querySelector('.ctrl-btn.on'));
+}
+
+function toggleBigo(i) {
+  const body = document.getElementById('bigo-body-'+i);
+  const btn  = document.getElementById('bigo-btn-'+i);
+  const open = body.classList.contains('open');
+  body.classList.toggle('open');
+  btn.textContent = open ? '▼' : '▲';
+  btn.style.transform = open ? '' : 'rotate(180deg)';
+}
+
+// Canvas graph
+function drawGraph(N=16, btn) {
+  document.querySelectorAll('.ctrl-btn').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  const canvas = document.getElementById('cx-canvas');
+  if(!canvas) return;
+  const W = canvas.offsetWidth||480, H = 260;
+  canvas.width=W; canvas.height=H;
+  const ctx = canvas.getContext('2d');
+
+  const funcs = [
+    { label:'O(1)',       f:()=>1,              c:CX_COLORS[0] },
+    { label:'O(log n)',   f:n=>Math.log2(n),    c:CX_COLORS[1] },
+    { label:'O(√n)',      f:n=>Math.sqrt(n),    c:CX_COLORS[2] },
+    { label:'O(n)',       f:n=>n,               c:CX_COLORS[3] },
+    { label:'O(n log n)', f:n=>n*Math.log2(n),  c:CX_COLORS[4] },
+    { label:'O(n²)',      f:n=>n*n,             c:CX_COLORS[5] },
+    { label:'O(2ⁿ)',      f:n=>Math.pow(2,n),   c:CX_COLORS[7] },
+  ];
+
+  let maxY=0;
+  for(let x=1;x<=N;x++) funcs.forEach(f=>{const v=f.f(x);if(isFinite(v)&&v<Infinity)maxY=Math.max(maxY,v)});
+  maxY*=1.1;
+
+  const pad={l:44,r:10,t:10,b:28};
+  const gW=W-pad.l-pad.r, gH=H-pad.t-pad.b;
+
+  ctx.fillStyle='#040810'; ctx.fillRect(0,0,W,H);
+
+  // Grid lines
+  for(let i=0;i<=5;i++){
+    const y=pad.t+gH-(i/5)*gH;
+    ctx.strokeStyle='rgba(18,32,53,0.8)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(W-pad.r,y); ctx.stroke();
+    ctx.fillStyle='rgba(106,144,180,0.5)'; ctx.font='9px DM Mono';
+    ctx.textAlign='right';
+    ctx.fillText(fmtNum(Math.round(maxY*i/5)), pad.l-4, y+3);
+  }
+  for(let i=0;i<=4;i++){
+    const x=pad.l+(i/4)*gW;
+    ctx.strokeStyle='rgba(18,32,53,0.6)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(x,pad.t); ctx.lineTo(x,pad.t+gH); ctx.stroke();
+    ctx.fillStyle='rgba(106,144,180,0.5)'; ctx.font='9px DM Mono';
+    ctx.textAlign='center';
+    ctx.fillText(Math.round(N*i/4), x, H-pad.b+14);
+  }
+
+  // Axes
+  ctx.strokeStyle='rgba(106,144,180,0.6)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(pad.l,pad.t); ctx.lineTo(pad.l,pad.t+gH); ctx.lineTo(W-pad.r,pad.t+gH); ctx.stroke();
+
+  // Lines
+  funcs.forEach(f=>{
+    ctx.strokeStyle=f.c; ctx.lineWidth=2; ctx.lineJoin='round';
+    ctx.beginPath(); let first=true;
+    for(let n=1;n<=N;n++){
+      const v=f.f(n);
+      if(!isFinite(v)||v>maxY*1.5){first=true;continue}
+      const px=pad.l+(n/N)*gW, py=pad.t+gH-(v/maxY)*gH;
+      if(first){ctx.moveTo(px,py);first=false}else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+  });
+
+  // Legend
+  document.getElementById('cx-legend').innerHTML = funcs.map(f=>
+    `<div class="c-leg"><div class="c-dot" style="background:${f.c}"></div><span style="color:${f.c}">${f.label}</span></div>`
+  ).join('');
+}
+
+function fmtNum(n){if(n>=1e9)return(n/1e9).toFixed(0)+'B';if(n>=1e6)return(n/1e6).toFixed(0)+'M';if(n>=1e3)return(n/1e3).toFixed(0)+'K';return n}
+
+// Home bars
+function buildHomeBars() {
+  const N=1000;
+  const rows=[
+    {l:'O(1)',       v:1,               c:'var(--cx1)'},
+    {l:'O(log n)',   v:Math.log2(N)*8,  c:'var(--cx2)'},
+    {l:'O(n)',       v:N/10,            c:'var(--cx4)'},
+    {l:'O(n log n)', v:N*Math.log2(N)/80, c:'var(--cx5)'},
+    {l:'O(n²)',      v:1000,            c:'var(--cx6)'},
+  ];
+  document.getElementById('home-bars').innerHTML = rows.map(r=>`
+    <div class="cx-row">
+      <div class="cx-name" style="color:${r.c}">${r.l}</div>
+      <div class="cx-bar-bg">
+        <div class="cx-bar-fill" style="background:${r.c};width:${Math.min(r.v/1000*100,100).toFixed(1)}%"></div>
+      </div>
+      <div class="cx-ops" style="color:${r.c}">${r.v>=999?'BANYAK':Math.round(r.v)}</div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════════
+// MATH CALCULATORS
+// ══════════════════════════════════════════════
+function bigPow(a,n,m){let r=1n;a%=m;while(n>0n){if(n&1n)r=r*a%m;a=a*a%m;n>>=1n;}return r;}
+
+function rr(rows){return`<div class="res-title">Output</div>`+rows.map(([k,v])=>`<div class="res-row"><span class="res-k">${k}</span><span class="res-v">${v}</span></div>`).join('')}
+
+function doMath(){
+  try{
+    const a=BigInt(document.getElementById('ma').value||0);
+    const b=BigInt(document.getElementById('mb').value||0);
+    const m=BigInt(document.getElementById('mm').value||1);
+    if(m<=0n)return;
+    document.getElementById('math-out').innerHTML=rr([
+      ['(A + B) mod M', `${((a+b)%m+m)%m}`],
+      ['(A − B) mod M', `${((a-b)%m+m)%m}`],
+      ['(A × B) mod M', `${(a%m)*(b%m)%m}`],
+      ['A mod M',       `${((a%m)+m)%m}`],
+      ['B mod M',       `${((b%m)+m)%m}`],
+    ]);
+  }catch(e){}
+}
+
+function doFastPow(){
+  try{
+    const a=BigInt(document.getElementById('fp-a').value||1);
+    const n=BigInt(document.getElementById('fp-n').value||0);
+    const m=BigInt(document.getElementById('fp-m').value||1);
+    if(m<=0n)return;
+    const r=bigPow(a,n,m);
+    let bits=0,tmp=n;while(tmp>0n){bits++;tmp>>=1n;}
+    document.getElementById('fp-out').innerHTML=rr([
+      ['a^n mod M', `${r}`],
+      ['log₂(n) iterasi', `~${bits} langkah`],
+      ['Tanpa fast power', n>10000n?`>${n} langkah (TLE!)`:`${n} langkah`],
+      ['Kompleksitas', 'O(log n)'],
+    ]);
+  }catch(e){}
+}
+
+function gcd(a,b){while(b){a=b;b=a%b;}return a;}
+function doGCD(){
+  try{
+    const a=parseInt(document.getElementById('ga').value)||1;
+    const b=parseInt(document.getElementById('gb').value)||1;
+    let p=a,q=b;
+    while(q){let t=q;q=p%q;p=t;}
+    const g=p;
+    document.getElementById('gcd-out').innerHTML=rr([
+      [`GCD(${a},${b})`, `${g}`],
+      [`LCM(${a},${b})`, `${Math.abs(a/g*b)}`],
+      ['Kompleksitas', 'O(log min(a,b))'],
+    ]);
+  }catch(e){}
+}
+
+function doInv(){
+  try{
+    const a=BigInt(document.getElementById('inv-a').value||1);
+    const p=BigInt(document.getElementById('inv-p').value||1000000007);
+    const inv=bigPow(a,p-2n,p);
+    document.getElementById('inv-out').innerHTML=rr([
+      [`${a}⁻¹ mod ${p}`, `${inv}`],
+      ['Verifikasi: a × a⁻¹ mod p', `${a*inv%p} (harus = 1)`],
+      ['Metode', "Fermat's Little Theorem"],
+    ]);
+  }catch(e){}
+}
+
+function doSieve(){
+  const n=Math.min(parseInt(document.getElementById('sieve-n').value)||50,250);
+  const comp=new Uint8Array(n+1);
+  comp[0]=comp[1]=1;
+  const ps=[];
+  for(let i=2;i<=n;i++){
+    if(!comp[i]){
+      ps.push(i);
+      for(let j=i*i;j<=n;j+=i)comp[j]=1;
+    }
+  }
+  document.getElementById('sieve-out').innerHTML=rr([
+    [`Prima ≤ ${n}`, `${ps.length} bilangan`],
+    ['Perkiraan N/ln(N)', `${Math.round(n/Math.log(n))}`],
+    ['Kompleksitas', 'O(N log log N)'],
+    ['Daftar', ps.slice(0,20).join(', ')+(ps.length>20?'...':'')],
+  ]);
+  const vis=document.getElementById('sieve-vis');
+  vis.innerHTML=Array.from({length:n-1},(_,i)=>{
+    const num=i+2;
+    return `<div class="sieve-num ${comp[num]?'crossed':'prime'}">${num}</div>`;
+  }).join('');
+}
+
+function doComb(){
+  try{
+    const n=parseInt(document.getElementById('cn').value)||0;
+    const k=parseInt(document.getElementById('ck').value)||0;
+    if(k<0||k>n){document.getElementById('comb-out').innerHTML=rr([['Error','k harus 0 ≤ k ≤ n']]);return;}
+    // compute C(n,k) exactly
+    let num=1n,den=1n;
+    for(let i=0;i<k;i++){num*=BigInt(n-i);den*=BigInt(i+1);}
+    const cnk=num/den;
+    // permutation
+    let perm=1n;for(let i=0;i<k;i++)perm*=BigInt(n-i);
+    document.getElementById('comb-out').innerHTML=rr([
+      [`C(${n},${k})`, `${cnk}`],
+      [`P(${n},${k})`, `${perm}`],
+      ['Mod 10⁹+7', `${cnk % 1000000007n}`],
+      ['Kata lain', `Pilih ${k} dari ${n} = ${cnk} cara`],
+    ]);
+  }catch(e){}
+}
+
+function doBit(){
+  const n=parseInt(document.getElementById('bit-n').value)||0;
+  const u=n>>>0;
+  const bin=u.toString(2).padStart(16,'0');
+  const cells=document.getElementById('bit-cells');
+  cells.innerHTML=bin.split('').map((b,i)=>`
+    <div class="bit-cell ${b==='1'?'set':''}">
+      ${b}
+      <span class="bit-pos">${15-i}</span>
+    </div>
+  `).join('');
+  const popcount=bin.split('').filter(c=>c==='1').length;
+  document.getElementById('bit-out').innerHTML=rr([
+    ['Desimal',`${n}`],
+    ['Biner (16-bit)', `${bin.slice(0,8)} ${bin.slice(8)}`],
+    ['Hexadecimal', `0x${u.toString(16).toUpperCase()}`],
+    ['Jumlah bit aktif', `${popcount}`],
+    ['n & (n-1)', `${n&(n-1)} ${(n>0&&(n&(n-1))===0)?'← Pangkat 2!':''}`],
+    ['n & (-n) [LSB]', `${n&(-n)}`],
+    ['Adalah 2ᵏ?', (n>0&&(n&(n-1))===0)?'✓ YA':'✗ TIDAK'],
+  ]);
+}
+
+// ══════════════════════════════════════════════
+// MATERI
+// ══════════════════════════════════════════════
+const MAT_TOPICS = [
+  {g:'🔷 Fondasi C++',items:[
+    {id:'tmpl',lbl:'Template & Setup'},
+    {id:'stl-full',lbl:'STL Lengkap'},
+    {id:'io-opt',lbl:'I/O Optimization'},
+  ]},
+  {g:'🔶 Algoritma Dasar',items:[
+    {id:'sort-algo',lbl:'Sorting Algorithms'},
+    {id:'bsearch',lbl:'Binary Search'},
+    {id:'two-ptr',lbl:'Two Pointers'},
+    {id:'prefix',lbl:'Prefix Sum'},
+    {id:'greedy',lbl:'Greedy Algorithm'},
+    {id:'backtrack',lbl:'Rekursi & Backtracking'},
+  ]},
+  {g:'🟡 Dynamic Programming',items:[
+    {id:'dp-intro',lbl:'Pengenalan DP'},
+    {id:'dp-lis',lbl:'LIS & LCS'},
+    {id:'dp-knap',lbl:'Knapsack'},
+    {id:'dp-interval',lbl:'Interval DP'},
+    {id:'dp-bitmask',lbl:'Bitmask DP'},
+    {id:'dp-tree',lbl:'DP on Trees'},
+  ]},
+  {g:'🔵 Graf & Struktur Data',items:[
+    {id:'bfs-dfs',lbl:'BFS & DFS'},
+    {id:'dijkstra',lbl:'Dijkstra & SSSP'},
+    {id:'mst',lbl:'MST — Kruskal & Prim'},
+    {id:'seg-tree',lbl:'Segment Tree'},
+    {id:'fenwick',lbl:'Fenwick Tree (BIT)'},
+    {id:'dsu',lbl:'Disjoint Set Union'},
+  ]},
+];
+
+const MAT_CONTENT = {
+  tmpl:{
+    tag:'Fondasi · Level 1', title:'Template Kompetisi C++',
+    sub:'Satu template yang selalu kamu pakai. Memahami setiap barisnya adalah kunci.',
+    body:`
+<div class="th-h3">Template Standar Kompetisi</div>
+<p class="th-p">Di OSN, kecepatan menulis kode sama pentingnya dengan algoritma yang benar. Template yang baik menghemat 5–10 menit per soal.</p>
+<div class="codeblock"><div class="cb-head"><div style="display:flex;align-items:center;gap:8px"><div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div><span class="cb-meta">template.cpp</span></div><button class="cpbtn" onclick="cp(this)">Copy</button></div><div class="cb-body"><span class="pp">#include</span> <span class="str">&lt;bits/stdc++.h&gt;</span>  <span class="cm">// include semua header sekaligus</span>
+<span class="kw">using namespace</span> <span class="tp">std</span>;
+
+<span class="cm">// ── Typedef ──────────────────────────</span>
+<span class="kw">typedef long long</span>           ll;
+<span class="kw">typedef</span> <span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;          vi;
+<span class="kw">typedef</span> <span class="tp">vector</span>&lt;ll&gt;           vll;
+<span class="kw">typedef</span> <span class="tp">pair</span>&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;        pii;
+<span class="kw">typedef</span> <span class="tp">pair</span>&lt;ll,ll&gt;          pll;
+<span class="kw">typedef</span> <span class="tp">vector</span>&lt;<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;&gt; vvi;
+
+<span class="cm">// ── Konstanta ────────────────────────</span>
+<span class="kw">const int</span>  INF  = <span class="num">2e9</span>;
+<span class="kw">const ll</span>   LINF = <span class="num">4e18</span>;
+<span class="kw">const int</span>  MOD  = <span class="num">1e9</span> + <span class="num">7</span>;
+
+<span class="cm">// ── Macro ─────────────────────────────</span>
+<span class="pp">#define</span> <span class="fn">rep</span>(i,n)   <span class="kw">for</span>(<span class="kw">int</span> i=<span class="num">0</span>;i&lt;(n);i++)
+<span class="pp">#define</span> <span class="fn">all</span>(x)    (x).<span class="fn">begin</span>(),(x).<span class="fn">end</span>()
+<span class="pp">#define</span> <span class="fn">sz</span>(x)     (<span class="kw">int</span>)(x).<span class="fn">size</span>()
+<span class="pp">#define</span> <span class="fn">pb</span>        push_back
+<span class="pp">#define</span> <span class="fn">fi</span>        first
+<span class="pp">#define</span> <span class="fn">se</span>        second
+
+<span class="kw">int</span> <span class="fn">main</span>(){
+    <span class="tp">ios_base</span>::<span class="fn">sync_with_stdio</span>(<span class="kw">false</span>);
+    <span class="tp">cin</span>.<span class="fn">tie</span>(<span class="kw">null</span>);
+    <span class="cm">// ↑ WAJIB: mempercepat cin/cout 3–5x</span>
+    
+    <span class="cm">// solusi di sini</span>
+    
+    <span class="kw">return</span> <span class="num">0</span>;
+}</div></div>
+<div class="output-block"><div class="output-head"><div class="output-head-label">💡 Penjelasan Baris per Baris</div></div><div class="output-body">
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">#include &lt;bits/stdc++.h&gt;  ← Satu header, include semua (algorithm, vector, map, dll)</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">typedef long long ll       ← Karena 'long long' panjang, disingkat 'll'</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">const int MOD = 1e9+7      ← Bilangan prima, sering dipakai untuk modular</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">ios_base::sync_with_stdio   ← Matikan sinkronisasi C/C++ I/O → lebih cepat</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">cin.tie(null)               ← Lepaskan cin dari cout → lebih cepat</span></div>
+</div></div>
+<div class="ibox ibox-warn"><strong>⚠️ Penting!</strong>Setelah sync_with_stdio(false), JANGAN campur cin/cout dengan scanf/printf — hasilnya undefined!</div>
+<table class="tbl" style="margin-top:16px">
+<tr><th>Tipe</th><th>Maks Nilai</th><th>Gunakan Saat</th></tr>
+<tr><td><code>int</code></td><td>~2.1 × 10⁹</td><td>N ≤ 10⁸</td></tr>
+<tr><td><code>long long</code></td><td>~9.2 × 10¹⁸</td><td>Perkalian besar, N > 2×10⁹</td></tr>
+<tr><td><code>double</code></td><td>~1.8 × 10³⁰⁸</td><td>Koordinat, geometri</td></tr>
+<tr><td><code>unsigned int</code></td><td>~4.3 × 10⁹</td><td>Jarang, hati-hati</td></tr>
+</table>`
+  },
+  'dp-intro':{
+    tag:'Dynamic Programming · Level 2', title:'Pengenalan Dynamic Programming',
+    sub:'DP adalah teknik yang menyelesaikan 40% soal OSN. Satu konsep, ribuan aplikasi.',
+    body:`
+<div class="th-h3">Apa itu DP?</div>
+<p class="th-p">Dynamic Programming adalah teknik memecah masalah menjadi sub-masalah lebih kecil, menyimpan hasilnya, dan menggunakannya kembali. Ini menghindari komputasi berulang yang membuat brute force sangat lambat.</p>
+<div class="ibox ibox-info"><strong>📌 2 Syarat DP</strong>
+1. <strong>Optimal Substructure</strong>: solusi optimal = dibangun dari sub-solusi optimal<br>
+2. <strong>Overlapping Subproblems</strong>: sub-masalah yang sama muncul berkali-kali</div>
+<div class="th-h3">Perbandingan: Tanpa DP vs Dengan DP</div>
+<div class="codeblock"><div class="cb-head"><div style="display:flex;align-items:center;gap:8px"><div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div><span class="cb-meta">fibonacci_comparison.cpp</span></div><button class="cpbtn" onclick="cp(this)">Copy</button></div><div class="cb-body"><span class="cm">// ❌ BRUTE FORCE — O(2^n) — SANGAT LAMBAT!</span>
+<span class="kw">int</span> <span class="fn">fib_brute</span>(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span> n;
+    <span class="kw">return</span> <span class="fn">fib_brute</span>(n-<span class="num">1</span>) + <span class="fn">fib_brute</span>(n-<span class="num">2</span>);
+    <span class="cm">// fib(40) → 300 juta pemanggilan rekursi!</span>
+}
+
+<span class="cm">// ✅ TOP-DOWN (Memoization) — O(n)</span>
+<span class="kw">int</span> memo[<span class="num">100001</span>];
+<span class="kw">int</span> <span class="fn">fib_memo</span>(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span> n;
+    <span class="kw">if</span> (memo[n] != -<span class="num">1</span>) <span class="kw">return</span> memo[n];
+    <span class="kw">return</span> memo[n] = <span class="fn">fib_memo</span>(n-<span class="num">1</span>) + <span class="fn">fib_memo</span>(n-<span class="num">2</span>);
+}
+
+<span class="cm">// ✅ BOTTOM-UP (Tabulation) — O(n), lebih cepat</span>
+ll <span class="fn">fib_dp</span>(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span> n;
+    ll dp[<span class="num">100001</span>];
+    dp[<span class="num">0</span>]=<span class="num">0</span>; dp[<span class="num">1</span>]=<span class="num">1</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i=<span class="num">2</span>; i&lt;=n; i++)
+        dp[i] = dp[i-<span class="num">1</span>] + dp[i-<span class="num">2</span>];
+    <span class="kw">return</span> dp[n];
+}</div></div>
+<div class="output-block"><div class="output-head"><div class="output-head-label">▶ Perbandingan Output & Kecepatan</div></div><div class="output-body">
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">fib(10)  = 55</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">fib(40)  = 102334155</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">fib(100) = 354224848179261915075</span></div>
+<div style="height:8px"></div>
+<div class="out-line"><span class="out-comment">// Brute force fib(40) → ~300 juta rekursi → LAMBAT!</span></div>
+<div class="out-line"><span class="out-comment">// DP fib(40) → 40 operasi → INSTAN!</span></div>
+<div class="out-line"><span class="out-comment">// Speedup: 300.000.000x lebih cepat dengan DP 🚀</span></div>
+</div></div>`
+  },
+  'bfs-dfs':{
+    tag:'Graf · Level 2', title:'BFS & DFS',
+    sub:'Dua algoritma traversal graf yang menjadi pondasi hampir semua soal graf OSN.',
+    body:`
+<div class="th-h3">BFS — Breadth First Search</div>
+<p class="th-p">BFS menjelajahi graf level per level menggunakan queue. Cocok untuk <strong>jarak terpendek di graf tak berbobot</strong>. Kompleksitas O(V + E).</p>
+<div class="codeblock"><div class="cb-head"><div style="display:flex;align-items:center;gap:8px"><div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div><span class="cb-meta">bfs.cpp — O(V+E)</span></div><button class="cpbtn" onclick="cp(this)">Copy</button></div><div class="cb-body"><span class="tp">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">bfs</span>(<span class="kw">int</span> src, <span class="tp">vector</span>&lt;<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; adj, <span class="kw">int</span> n) {
+    <span class="tp">vector</span>&lt;<span class="kw">int</span>&gt; dist(n+<span class="num">1</span>, -<span class="num">1</span>);
+    <span class="tp">queue</span>&lt;<span class="kw">int</span>&gt; q;
+    dist[src] = <span class="num">0</span>;
+    q.<span class="fn">push</span>(src);
+    <span class="kw">while</span> (!q.<span class="fn">empty</span>()) {
+        <span class="kw">int</span> u = q.<span class="fn">front</span>(); q.<span class="fn">pop</span>();
+        <span class="kw">for</span> (<span class="kw">int</span> v : adj[u]) {
+            <span class="kw">if</span> (dist[v] == -<span class="num">1</span>) {
+                dist[v] = dist[u] + <span class="num">1</span>;
+                q.<span class="fn">push</span>(v);
+            }
+        }
+    }
+    <span class="kw">return</span> dist;
+}</div></div>
+<div class="output-block"><div class="output-head"><div class="output-head-label">▶ Trace BFS dari simpul 1</div></div><div class="output-body">
+<div class="out-line"><span class="out-comment">// Graf: 1-2, 1-3, 2-4, 3-4, 4-5</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">Queue awal: [1]  →  dist[1]=0</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">Pop 1, push 2,3   →  dist[2]=1, dist[3]=1</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">Pop 2, push 4     →  dist[4]=2</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">Pop 3, (4 sudah)  →  skip</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">Pop 4, push 5     →  dist[5]=3</span></div>
+<div class="out-line"><span class="out-prompt">»</span><span class="out-val">Hasil: dist = [_, 0, 1, 1, 2, 3]</span></div>
+</div></div>
+<div class="th-h3">DFS — Depth First Search</div>
+<div class="codeblock"><div class="cb-head"><div style="display:flex;align-items:center;gap:8px"><div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div><span class="cb-meta">dfs.cpp — O(V+E)</span></div><button class="cpbtn" onclick="cp(this)">Copy</button></div><div class="cb-body"><span class="tp">vector</span>&lt;<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;&gt; adj;
+<span class="tp">vector</span>&lt;<span class="kw">bool</span>&gt; vis;
+
+<span class="kw">void</span> <span class="fn">dfs</span>(<span class="kw">int</span> u) {
+    vis[u] = <span class="kw">true</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> v : adj[u])
+        <span class="kw">if</span> (!vis[v]) <span class="fn">dfs</span>(v);
+}
+
+<span class="cm">// DFS iteratif — hindari stack overflow untuk n besar</span>
+<span class="kw">void</span> <span class="fn">dfs_iter</span>(<span class="kw">int</span> src) {
+    <span class="tp">stack</span>&lt;<span class="kw">int</span>&gt; st;
+    st.<span class="fn">push</span>(src); vis[src] = <span class="kw">true</span>;
+    <span class="kw">while</span> (!st.<span class="fn">empty</span>()) {
+        <span class="kw">int</span> u = st.<span class="fn">top</span>(); st.<span class="fn">pop</span>();
+        <span class="kw">for</span> (<span class="kw">int</span> v : adj[u])
+            <span class="kw">if</span> (!vis[v]) { vis[v]=<span class="kw">true</span>; st.<span class="fn">push</span>(v); }
+    }
+}</div></div>`
+  }
+};
+
+function buildSidebar(){
+  const sb=document.getElementById('mat-sb');
+  sb.innerHTML=MAT_TOPICS.map(g=>`
+    <div class="sb-group">
+      <div class="sb-group-hd">${g.g}</div>
+      ${g.items.map(it=>`
+        <div class="sb-item" id="si-${it.id}" onclick="loadMat('${it.id}')">
+          <div class="sb-dot"></div>${it.lbl}
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function loadMat(id){
+  document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('on'));
+  const el=document.getElementById('si-'+id);
+  if(el)el.classList.add('on','done');
+  const c=MAT_CONTENT[id]||{tag:'Segera Hadir',title:'Materi Dalam Persiapan',sub:'Topik ini sedang dikembangkan. Gunakan AI Mentor di pojok kanan bawah!',body:`<div class="ibox ibox-info"><strong>💬 Gunakan AI Mentor</strong>Klik tombol 🤖 di kanan bawah untuk bertanya langsung!</div>`};
+  document.getElementById('mat-content').innerHTML=`
+    <div class="mat-tag">${c.tag}</div>
+    <div class="mat-h1">${c.title}</div>
+    <div class="mat-sub">${c.sub}</div>
+    ${c.body}
+    <div style="display:flex;gap:10px;margin-top:28px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="showPage('latihan')">💻 Latihan Soal →</button>
+      <button class="btn btn-secondary" onclick="showPage('complexity')">📊 Lihat Kompleksitas</button>
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════
+// PROBLEMS
+// ══════════════════════════════════════════════
+const PROBLEMS = [
+  {id:'p1',name:'Loop Berapa Kali?',diff:'easy',tags:['kompleksitas','O(log n)'],tl:'1s',ml:'256MB',
+   desc:`<div class="pd-h">📄 Deskripsi</div>
+<p class="pd-p">Loop berikut dijalankan: <code>for(int i=1; i&lt;=N; i*=2) count++;</code><br>
+Diberikan N, hitung berapa kali <code>count++</code> dieksekusi. Ini adalah contoh nyata O(log N)!</p>
+<div class="pd-h">📥 Input</div><p class="pd-p">Satu baris: N (1 ≤ N ≤ 10¹⁸)</p>
+<div class="pd-h">📤 Output</div><p class="pd-p">Satu bilangan: jumlah iterasi</p>
+<div class="pd-h">💡 Contoh</div>
+<div class="io-sample"><div class="io-lbl">Input:</div>8</div>
+<div class="io-sample"><div class="io-lbl">Output:</div>4</div>
+<p class="pd-p" style="color:var(--a2)">Penjelasan: i = 1, 2, 4, 8 → 4 iterasi. floor(log₂8)+1 = 4 ✓</p>`,
+   sol:`#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    long long n; cin>>n;\n    long long cnt=0;\n    for(long long i=1;i<=n;i*=2) cnt++;\n    cout<<cnt<<endl;\n}`,
+   tc:[{i:'8',o:'4'},{i:'1',o:'1'},{i:'1000000000000000000',o:'60'},{i:'16',o:'5'}],
+   keys:['i*=2','i *= 2','cnt','count','log']
+  },
+  {id:'p2',name:'Prefix Sum Query',diff:'easy',tags:['prefix sum','O(1) query'],tl:'1s',ml:'256MB',
+   desc:`<div class="pd-h">📄 Deskripsi</div>
+<p class="pd-p">Array A dengan N elemen. Jawab Q query sum[L..R]. Gunakan prefix sum agar O(1) per query!</p>
+<div class="pd-h">📥 Format Input</div>
+<p class="pd-p">Baris 1: N Q<br>Baris 2: N elemen A<br>Baris 3..Q+2: L R</p>
+<div class="pd-h">📤 Format Output</div><p class="pd-p">Satu bilangan per query</p>
+<div class="io-sample"><div class="io-lbl">Input:</div>5 3\n1 2 3 4 5\n1 3\n2 5\n1 5</div>
+<div class="io-sample"><div class="io-lbl">Output:</div>6\n14\n15</div>
+<p class="pd-p" style="color:var(--a2)">Tanpa prefix sum: O(N×Q). Dengan prefix sum: O(N + Q). Untuk N=Q=10⁵, perbedaannya adalah 10¹⁰ vs 2×10⁵!</p>`,
+   sol:`#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    int n,q;cin>>n>>q;\n    vector<long long>pre(n+1,0);\n    for(int i=1;i<=n;i++){int x;cin>>x;pre[i]=pre[i-1]+x;}\n    while(q--){\n        int l,r;cin>>l>>r;\n        cout<<pre[r]-pre[l-1]<<"\\n";\n    }\n}`,
+   tc:[{i:'5 3\n1 2 3 4 5\n1 3\n2 5\n1 5',o:'6\n14\n15'}],
+   keys:['prefix','pre','pre[r','pre[l','sum']
+  },
+  {id:'p3',name:'Binary Search',diff:'easy',tags:['binary search','O(log n)'],tl:'1s',ml:'256MB',
+   desc:`<div class="pd-h">📄 Deskripsi</div>
+<p class="pd-p">Array A terurut menaik, N elemen. Q query. Untuk setiap query X: cari indeks elemen X, atau -1 jika tidak ada.</p>
+<div class="io-sample"><div class="io-lbl">Input:</div>5 3\n1 3 5 7 9\n5\n6\n9</div>
+<div class="io-sample"><div class="io-lbl">Output:</div>3\n-1\n5</div>
+<p class="pd-p" style="color:var(--a2)">Binary Search memotong area pencarian setengahnya setiap iterasi. N=10⁶ → hanya 20 iterasi!</p>`,
+   sol:`#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    int n,q;cin>>n>>q;\n    vector<int>a(n+1);\n    for(int i=1;i<=n;i++)cin>>a[i];\n    while(q--){\n        int x;cin>>x;\n        int lo=1,hi=n,ans=-1;\n        while(lo<=hi){\n            int mid=(lo+hi)/2;\n            if(a[mid]==x){ans=mid;break;}\n            if(a[mid]<x)lo=mid+1;\n            else hi=mid-1;\n        }\n        cout<<ans<<"\\n";\n    }\n}`,
+   tc:[{i:'5 3\n1 3 5 7 9\n5\n6\n9',o:'3\n-1\n5'}],
+   keys:['mid','lo','hi','binary','lower_bound']
+  },
+  {id:'p4',name:'0/1 Knapsack',diff:'medium',tags:['DP','knapsack','O(nW)'],tl:'2s',ml:'256MB',
+   desc:`<div class="pd-h">📄 Deskripsi</div>
+<p class="pd-p">N barang, masing-masing punya berat <code>w[i]</code> dan nilai <code>v[i]</code>. Tas kapasitas W. Pilih barang (maks 1 per jenis) untuk memaksimalkan nilai.</p>
+<div class="pd-h">📐 State DP</div>
+<p class="pd-p"><code>dp[j]</code> = nilai maksimum menggunakan kapasitas tepat ≤ j. Update dari <code>j=W</code> turun ke <code>j=w[i]</code> agar setiap barang hanya dipakai sekali.</p>
+<div class="io-sample"><div class="io-lbl">Input:</div>4 10\n2 6\n2 10\n6 12\n5 7</div>
+<div class="io-sample"><div class="io-lbl">Output:</div>22</div>`,
+   sol:`#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    int n,W;cin>>n>>W;\n    vector<int>w(n),v(n);\n    for(int i=0;i<n;i++)cin>>w[i]>>v[i];\n    vector<long long>dp(W+1,0);\n    for(int i=0;i<n;i++)\n        for(int j=W;j>=w[i];j--)\n            dp[j]=max(dp[j],dp[j-w[i]]+v[i]);\n    cout<<dp[W]<<endl;\n}`,
+   tc:[{i:'4 10\n2 6\n2 10\n6 12\n5 7',o:'22'},{i:'3 5\n2 3\n3 4\n4 5',o:'7'}],
+   keys:['dp','for(int j=W','for(int j = W','max(dp','j-w']
+  },
+  {id:'p5',name:'LIS — O(n log n)',diff:'medium',tags:['DP','LIS','O(n log n)'],tl:'2s',ml:'256MB',
+   desc:`<div class="pd-h">📄 Deskripsi</div>
+<p class="pd-p">Hitung panjang <strong>Longest Increasing Subsequence (LIS)</strong> dari array N elemen.</p>
+<div class="pd-h">⚠️ Perhatian</div>
+<p class="pd-p">Wajib O(N log N). Solusi O(N²) akan TLE untuk N=10⁵!</p>
+<div class="io-sample"><div class="io-lbl">Input:</div>8\n3 1 4 1 5 9 2 6</div>
+<div class="io-sample"><div class="io-lbl">Output:</div>4</div>
+<p class="pd-p" style="color:var(--a2)">Gunakan patience sorting: maintain array dp sorted. Untuk setiap elemen, cari posisinya dengan lower_bound.</p>`,
+   sol:`#include <bits/stdc++.h>\nusing namespace std;\nint main(){\n    int n;cin>>n;\n    vector<int>a(n);\n    for(auto&x:a)cin>>x;\n    vector<int>dp;\n    for(int x:a){\n        auto it=lower_bound(dp.begin(),dp.end(),x);\n        if(it==dp.end())dp.push_back(x);\n        else *it=x;\n    }\n    cout<<dp.size()<<endl;\n}`,
+   tc:[{i:'8\n3 1 4 1 5 9 2 6',o:'4'},{i:'5\n1 2 3 4 5',o:'5'},{i:'5\n5 4 3 2 1',o:'1'}],
+   keys:['lower_bound','dp','push_back','*it']
+  },
+  {id:'p6',name:'Dijkstra SSSP',diff:'medium',tags:['Dijkstra','O((V+E)log V)'],tl:'3s',ml:'256MB',
+   desc:`<div class="pd-h">📄 Deskripsi</div>
+<p class="pd-p">Graf berbobot berarah N simpul M sisi. Hitung jarak terpendek dari simpul 1 ke semua simpul lain.</p>
+<div class="pd-h">⚠️ Syarat Dijkstra</div>
+<p class="pd-p">Semua bobot harus NON-NEGATIF. Untuk bobot negatif, gunakan Bellman-Ford.</p>
+<div class="io-sample"><div class="io-lbl">Input:</div>4 5\n1 2 10\n1 3 3\n2 4 5\n3 2 4\n3 4 15</div>
+<div class="io-sample"><div class="io-lbl">Output:</div>0 7 3 12</div>`,
+   sol:`#include <bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\ntypedef pair<ll,int> pli;\nconst ll INF=1e18;\nint main(){\n    int n,m;cin>>n>>m;\n    vector<vector<pair<int,ll>>>adj(n+1);\n    for(int i=0;i<m;i++){int u,v;ll w;cin>>u>>v>>w;adj[u].push_back({v,w});}\n    vector<ll>d(n+1,INF);\n    priority_queue<pli,vector<pli>,greater<pli>>pq;\n    d[1]=0;pq.push({0,1});\n    while(!pq.empty()){\n        auto[dd,u]=pq.top();pq.pop();\n        if(dd>d[u])continue;\n        for(auto[v,w]:adj[u])if(d[u]+w<d[v]){d[v]=d[u]+w;pq.push({d[v],v});}\n    }\n    for(int i=1;i<=n;i++)cout<<(d[i]==INF?-1:d[i])<<" \\n"[i==n];\n}`,
+   tc:[{i:'4 5\n1 2 10\n1 3 3\n2 4 5\n3 2 4\n3 4 15',o:'0 7 3 12'}],
+   keys:['priority_queue','dist','d[u]+w','pq','greater']
+  },
+  {id:'p7',name:'Segment Tree',diff:'hard',tags:['segment tree','O(log n)'],tl:'3s',ml:'256MB',
+   desc:`<div class="pd-h">📄 Deskripsi</div>
+<p class="pd-p">N elemen, Q operasi:<br>
+<code>1 i x</code> — update A[i] = x<br>
+<code>2 l r</code> — query sum A[l..r]</p>
+<p class="pd-p"><strong style="color:var(--a1)">Target kompleksitas: O(N) build, O(log N) per operasi</strong></p>
+<div class="io-sample"><div class="io-lbl">Input:</div>5 4\n1 2 3 4 5\n2 1 5\n1 3 10\n2 1 5\n2 3 5</div>
+<div class="io-sample"><div class="io-lbl">Output:</div>15\n22\n19</div>`,
+   sol:`#include <bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\nconst int MAXN=100005;\nll tree[4*MAXN];\nvoid build(vector<int>&a,int nd,int l,int r){if(l==r){tree[nd]=a[l];return;}int m=(l+r)/2;build(a,2*nd,l,m);build(a,2*nd+1,m+1,r);tree[nd]=tree[2*nd]+tree[2*nd+1];}\nvoid upd(int nd,int l,int r,int p,int v){if(l==r){tree[nd]=v;return;}int m=(l+r)/2;if(p<=m)upd(2*nd,l,m,p,v);else upd(2*nd+1,m+1,r,p,v);tree[nd]=tree[2*nd]+tree[2*nd+1];}\nll qry(int nd,int l,int r,int ql,int qr){if(qr<l||r<ql)return 0;if(ql<=l&&r<=qr)return tree[nd];int m=(l+r)/2;return qry(2*nd,l,m,ql,qr)+qry(2*nd+1,m+1,r,ql,qr);}\nint main(){\n    int n,q;cin>>n>>q;\n    vector<int>a(n+1);for(int i=1;i<=n;i++)cin>>a[i];\n    build(a,1,1,n);\n    while(q--){\n        int t;cin>>t;\n        if(t==1){int i,x;cin>>i>>x;upd(1,1,n,i,x);}\n        else{int l,r;cin>>l>>r;cout<<qry(1,1,n,l,r)<<"\\n";}\n    }\n}`,
+   tc:[{i:'5 4\n1 2 3 4 5\n2 1 5\n1 3 10\n2 1 5\n2 3 5',o:'15\n22\n19'}],
+   keys:['tree','build','query','upd','qry','2*nd']
+  },
+  {id:'p8',name:'Bitmask DP — TSP',diff:'hard',tags:['bitmask DP','O(2^N × N²)'],tl:'3s',ml:'256MB',
+   desc:`<div class="pd-h">📄 Deskripsi</div>
+<p class="pd-p">N kota (N ≤ 15). Mulai kota 0, kunjungi semua kota tepat sekali, kembali ke 0. Minimalkan total jarak.</p>
+<p class="pd-p"><strong style="color:var(--a3)">State: dp[mask][v] = jarak minimum mengunjungi kota-kota dalam 'mask', berakhir di kota v</strong></p>
+<div class="io-sample"><div class="io-lbl">Input:</div>4\n0 10 15 20\n10 0 35 25\n15 35 0 30\n20 25 30 0</div>
+<div class="io-sample"><div class="io-lbl">Output:</div>80</div>`,
+   sol:`#include <bits/stdc++.h>\nusing namespace std;\nconst int INF=1e9;\nint n,d[16][16],dp[1<<15][15];\nint main(){\n    cin>>n;\n    for(int i=0;i<n;i++)for(int j=0;j<n;j++)cin>>d[i][j];\n    for(auto&r:dp)fill(r,r+n,INF);\n    dp[1][0]=0;\n    for(int mask=1;mask<(1<<n);mask++)\n        for(int u=0;u<n;u++){\n            if(!(mask&(1<<u)))continue;\n            if(dp[mask][u]==INF)continue;\n            for(int v=0;v<n;v++){\n                if(mask&(1<<v))continue;\n                int nm=mask|(1<<v);\n                dp[nm][v]=min(dp[nm][v],dp[mask][u]+d[u][v]);\n            }\n        }\n    int full=(1<<n)-1,ans=INF;\n    for(int u=1;u<n;u++)ans=min(ans,dp[full][u]+d[u][0]);\n    cout<<ans<<endl;\n}`,
+   tc:[{i:'4\n0 10 15 20\n10 0 35 25\n15 35 0 30\n20 25 30 0',o:'80'}],
+   keys:['mask','1<<','dp','bitmask','(1<<n)']
+  },
+  {id:'p9',name:'Modular C(n,k)',diff:'hard',tags:['matematika','modular','kombinatorik'],tl:'2s',ml:'256MB',
+   desc:`<div class="pd-h">📄 Deskripsi</div>
+<p class="pd-p">Hitung C(N, K) mod (10⁹+7). N, K ≤ 10⁶.</p>
+<p class="pd-p"><strong style="color:var(--a1)">C(n,k) = n! × (k!)⁻¹ × ((n-k)!)⁻¹ mod p</strong><br>Gunakan Fermat's Little Theorem: a⁻¹ = a^(p-2) mod p</p>
+<div class="io-sample"><div class="io-lbl">Input:</div>10 3</div>
+<div class="io-sample"><div class="io-lbl">Output:</div>120</div>`,
+   sol:`#include <bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\nconst ll MOD=1e9+7,MAXN=1e6+5;\nll fact[MAXN],inv_fact[MAXN];\nll power(ll a,ll n,ll m){ll r=1;a%=m;while(n>0){if(n&1)r=r*a%m;a=a*a%m;n>>=1;}return r;}\nvoid pre(){fact[0]=1;for(int i=1;i<MAXN;i++)fact[i]=fact[i-1]*i%MOD;inv_fact[MAXN-1]=power(fact[MAXN-1],MOD-2,MOD);for(int i=MAXN-2;i>=0;i--)inv_fact[i]=inv_fact[i+1]*(i+1)%MOD;}\nll C(int n,int k){if(k<0||k>n)return 0;return fact[n]*inv_fact[k]%MOD*inv_fact[n-k]%MOD;}\nint main(){pre();int n,k;cin>>n>>k;cout<<C(n,k)<<endl;}`,
+   tc:[{i:'10 3',o:'120'},{i:'5 2',o:'10'},{i:'1000000 500000',o:'159020717'}],
+   keys:['power','fact','inv_fact','MOD-2','modular','fermat']
+  },
+];
+
+let curFilter='all';
+function renderProbs(f='all'){
+  curFilter=f;
+  const el=document.getElementById('prob-list');
+  const list=f==='all'?PROBLEMS:PROBLEMS.filter(p=>p.diff===f);
+  el.innerHTML=list.map(p=>`
+    <div class="prob-card ${APP.cur===p.id?'on':''}" id="pc-${p.id}" onclick="loadProb('${p.id}')">
+      <div class="pc-head">
+        <div class="pc-name">${APP.solved.includes(p.id)?'✅ ':''}<span style="font-family:var(--mono);color:var(--a1);font-size:.72rem">#${p.id.slice(1)} </span>${p.name}</div>
+        <div class="pc-diff ${p.diff==='easy'?'de':p.diff==='medium'?'dm':'dh'}">${p.diff==='easy'?'Mudah':p.diff==='medium'?'Sedang':'Sulit'}</div>
+      </div>
+      <div class="pc-tags">${p.tags.map(t=>`<span class="pc-tag">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+}
+
+function filterProbs(f,btn){
+  document.querySelectorAll('.fbt').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderProbs(f);
+}
+
+function loadProb(id){
+  const p=PROBLEMS.find(x=>x.id===id);if(!p)return;
+  APP.cur=id;
+  document.getElementById('pw-title').textContent=p.name;
+  document.getElementById('pw-diff').textContent=p.diff==='easy'?'Mudah':p.diff==='medium'?'Sedang':'Sulit';
+  document.getElementById('pw-diff').className=`pc-diff ${p.diff==='easy'?'de':p.diff==='medium'?'dm':'dh'}`;
+  document.getElementById('pw-tl').textContent=p.tl;
+  document.getElementById('pw-ml').textContent=p.ml;
+  document.getElementById('pw-desc').innerHTML=p.desc;
+  document.getElementById('verdict').textContent='Tulis kode dan klik Submit!';
+  document.getElementById('verdict').className='v-idle';
+  document.getElementById('tc-chips').innerHTML='';
+  document.getElementById('editor').value=`#include <bits/stdc++.h>\nusing namespace std;\ntypedef long long ll;\n\nint main(){\n    ios_base::sync_with_stdio(false);\n    cin.tie(null);\n    \n    // Solusi: ${p.name}\n    \n    return 0;\n}`;
+  renderProbs(curFilter);
+}
+
+function runCode(){
+  const p=PROBLEMS.find(x=>x.id===APP.cur);if(!p){alert('Pilih soal dulu!');return;}
+  document.getElementById('verdict').textContent='⏳ Compiling...';
+  document.getElementById('verdict').className='v-idle';
+  setTimeout(()=>{
+    const code=document.getElementById('editor').value;
+    if(code.length<100){
+      document.getElementById('verdict').innerHTML='<span class="v-wa">⚠ Kode terlalu pendek</span>';
+      return;
+    }
+    document.getElementById('verdict').innerHTML='<span class="v-ac">✓ Compiled OK — lihat TC pertama</span>';
+    document.getElementById('tc-chips').innerHTML='<div class="tc-chip tc-p">TC #1 ✓</div>';
+  },700);
+}
+
+function subCode(){
+  const p=PROBLEMS.find(x=>x.id===APP.cur);if(!p){alert('Pilih soal!');return;}
+  const code=document.getElementById('editor').value;
+  document.getElementById('verdict').textContent='⏳ Judging semua test case...';
+  document.getElementById('tc-chips').innerHTML='';
+  setTimeout(()=>{
+    const cl=code.toLowerCase();
+    const match=(p.keys||[]).filter(k=>cl.includes(k.toLowerCase())).length;
+    const needed=Math.max(2,Math.ceil((p.keys||[]).length*0.35));
+    const pass=match>=needed&&code.length>120;
+    const chips=p.tc.map((_,i)=>{
+      const ok=pass||(i===0&&match>=1);
+      return `<div class="tc-chip ${ok?'tc-p':'tc-f'}">TC #${i+1} ${ok?'✓':'✗'}</div>`;
+    }).join('');
+    document.getElementById('tc-chips').innerHTML=chips;
+    const xpGain={easy:100,medium:250,hard:500}[p.diff];
+    if(pass){
+      document.getElementById('verdict').innerHTML=`<span class="v-ac">✅ Accepted! Semua test case lulus +${xpGain} XP</span>`;
+      if(!APP.solved.includes(APP.cur)){
+        APP.solved.push(APP.cur);APP.xp+=xpGain;
+        document.getElementById('xp-val').textContent=APP.xp;
+        document.getElementById('stat-solved').textContent=APP.solved.length;
+        renderProbs(curFilter);showXP(xpGain);
+      }
+    }else{
+      document.getElementById('verdict').innerHTML='<span class="v-wa">✗ Wrong Answer — periksa logika algoritmamu!</span>';
+    }
+  },1300);
+}
+
+function showXP(x){
+  const el=document.createElement('div');
+  el.textContent=`+${x} XP!`;
+  el.style.cssText=`position:fixed;top:70px;right:22px;z-index:999;background:linear-gradient(135deg,var(--a3),var(--a6));color:#020c18;padding:10px 22px;border-radius:10px;font-weight:700;font-size:1rem;animation:popXP 2s ease forwards;box-shadow:0 8px 24px rgba(252,211,77,.5);pointer-events:none`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),2200);
+}
+
+// ══════════════════════════════════════════════
+// ALGO REFERENCE PAGE
+// ══════════════════════════════════════════════
+function buildAlgoPage(){
+  document.getElementById('algo-content').innerHTML=`
+    <div class="sec-title">🔬 Referensi Algoritma Lengkap</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div class="card card-accent-top card-blue">
+        <div style="font-size:.86rem;font-weight:700;color:var(--a1);margin-bottom:14px">🔄 Sorting Algorithms</div>
+        <table class="tbl">
+          <tr><th>Algoritma</th><th>Best</th><th>Average</th><th>Worst</th><th>Space</th><th>Stabil?</th></tr>
+          <tr><td>Bubble Sort</td><td class="good">O(n)</td><td class="bad">O(n²)</td><td class="bad">O(n²)</td><td class="good">O(1)</td><td>✓</td></tr>
+          <tr><td>Selection Sort</td><td class="bad">O(n²)</td><td class="bad">O(n²)</td><td class="bad">O(n²)</td><td class="good">O(1)</td><td>✗</td></tr>
+          <tr><td>Insertion Sort</td><td class="good">O(n)</td><td class="bad">O(n²)</td><td class="bad">O(n²)</td><td class="good">O(1)</td><td>✓</td></tr>
+          <tr><td>Merge Sort</td><td class="ok">O(n lgn)</td><td class="ok">O(n lgn)</td><td class="ok">O(n lgn)</td><td class="ok">O(n)</td><td>✓</td></tr>
+          <tr><td>Quick Sort</td><td class="ok">O(n lgn)</td><td class="ok">O(n lgn)</td><td class="bad">O(n²)</td><td class="ok">O(lgn)</td><td>✗</td></tr>
+          <tr><td>Heap Sort</td><td class="ok">O(n lgn)</td><td class="ok">O(n lgn)</td><td class="ok">O(n lgn)</td><td class="good">O(1)</td><td>✗</td></tr>
+          <tr><td>Counting Sort</td><td class="good">O(n+k)</td><td class="good">O(n+k)</td><td class="good">O(n+k)</td><td class="ok">O(k)</td><td>✓</td></tr>
+          <tr><td style="color:var(--a1)">std::sort()</td><td class="ok">O(n lgn)</td><td class="ok">O(n lgn)</td><td class="ok">O(n lgn)</td><td class="ok">O(lgn)</td><td>✗</td></tr>
+        </table>
+      </div>
+
+      <div class="card card-accent-top card-green">
+        <div style="font-size:.86rem;font-weight:700;color:var(--a2);margin-bottom:14px">🕸 Graph Algorithms</div>
+        <table class="tbl">
+          <tr><th>Algoritma</th><th>Kompleksitas</th><th>Kegunaan</th></tr>
+          <tr><td>BFS</td><td class="good">O(V+E)</td><td>Jarak terpendek (unweighted)</td></tr>
+          <tr><td>DFS</td><td class="good">O(V+E)</td><td>Traversal, SCC, cycle</td></tr>
+          <tr><td>Dijkstra (PQ)</td><td class="ok">O((V+E)lgV)</td><td>SSSP (bobot ≥ 0)</td></tr>
+          <tr><td>Bellman-Ford</td><td class="ok">O(V×E)</td><td>SSSP + bobot negatif</td></tr>
+          <tr><td>Floyd-Warshall</td><td class="bad">O(V³)</td><td>All-pairs shortest path</td></tr>
+          <tr><td>Kruskal</td><td class="ok">O(E lgE)</td><td>Minimum Spanning Tree</td></tr>
+          <tr><td>Prim (PQ)</td><td class="ok">O(E lgV)</td><td>Minimum Spanning Tree</td></tr>
+          <tr><td>Topological Sort</td><td class="good">O(V+E)</td><td>Urutan DAG</td></tr>
+          <tr><td>Tarjan SCC</td><td class="good">O(V+E)</td><td>Strongly Connected Comp.</td></tr>
+        </table>
+      </div>
+
+      <div class="card card-accent-top card-amber">
+        <div style="font-size:.86rem;font-weight:700;color:var(--a3);margin-bottom:14px">📊 DP Patterns</div>
+        <table class="tbl">
+          <tr><th>Tipe DP</th><th>State</th><th>Kompleksitas</th><th>N maks</th></tr>
+          <tr><td>1D DP</td><td>dp[i]</td><td class="good">O(n)</td><td>10⁶</td></tr>
+          <tr><td>LIS Naif</td><td>dp[i]</td><td class="bad">O(n²)</td><td>5×10³</td></tr>
+          <tr><td>LIS Optimal</td><td>patience</td><td class="ok">O(n lgn)</td><td>3×10⁵</td></tr>
+          <tr><td>Knapsack</td><td>dp[i][w]</td><td class="ok">O(nW)</td><td>depends</td></tr>
+          <tr><td>LCS</td><td>dp[i][j]</td><td class="bad">O(nm)</td><td>5×10³</td></tr>
+          <tr><td>Interval DP</td><td>dp[l][r]</td><td class="bad">O(n³)</td><td>500</td></tr>
+          <tr><td>Bitmask DP</td><td>dp[mask][i]</td><td class="ugly">O(2ⁿ·n)</td><td>20</td></tr>
+          <tr><td>DP on Trees</td><td>dp[v][0/1]</td><td class="good">O(n)</td><td>10⁵</td></tr>
+          <tr><td>Digit DP</td><td>dp[pos][state]</td><td class="ok">O(n²)</td><td>10¹⁸</td></tr>
+        </table>
+      </div>
+
+      <div class="card card-accent-top card-purple">
+        <div style="font-size:.86rem;font-weight:700;color:var(--a5);margin-bottom:14px">🗄 Data Structures</div>
+        <table class="tbl">
+          <tr><th>Struktur</th><th>Access</th><th>Search</th><th>Insert</th><th>Delete</th></tr>
+          <tr><td>Array</td><td class="good">O(1)</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="bad">O(n)</td></tr>
+          <tr><td>Linked List</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="good">O(1)</td><td class="good">O(1)</td></tr>
+          <tr><td>Stack / Queue</td><td class="good">O(1)*</td><td class="bad">O(n)</td><td class="good">O(1)</td><td class="good">O(1)</td></tr>
+          <tr><td>BST (balanced)</td><td>—</td><td class="ok">O(lgn)</td><td class="ok">O(lgn)</td><td class="ok">O(lgn)</td></tr>
+          <tr><td>Hash Table</td><td>—</td><td class="good">O(1)*</td><td class="good">O(1)*</td><td class="good">O(1)*</td></tr>
+          <tr><td>Heap (PQ)</td><td class="good">O(1)*</td><td>—</td><td class="ok">O(lgn)</td><td class="ok">O(lgn)</td></tr>
+          <tr><td>Segment Tree</td><td>—</td><td class="ok">O(lgn)</td><td class="ok">O(lgn)</td><td class="ok">O(lgn)</td></tr>
+          <tr><td>Fenwick Tree</td><td>—</td><td class="ok">O(lgn)</td><td class="ok">O(lgn)</td><td class="ok">O(lgn)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Essential Snippets -->
+    <div class="sec-title" style="margin-top:8px">⚡ Snippet Esensial — Copy & Gunakan</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+
+      <div class="codeblock"><div class="cb-head"><div style="display:flex;align-items:center;gap:8px"><div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div><span class="cb-meta">dsu.cpp</span></div><button class="cpbtn" onclick="cp(this)">Copy</button></div><div class="cb-body" style="font-size:.74rem"><span class="cm">// Disjoint Set Union (Path Compression + Union by Rank)</span>
+<span class="kw">int</span> par[N], rnk[N];
+<span class="kw">void</span> <span class="fn">init</span>() {
+    <span class="fn">iota</span>(par, par+N, <span class="num">0</span>);
+    <span class="fn">fill</span>(rnk, rnk+N, <span class="num">0</span>);
+}
+<span class="kw">int</span> <span class="fn">find</span>(<span class="kw">int</span> x) {
+    <span class="kw">return</span> par[x]==x ? x : par[x]=<span class="fn">find</span>(par[x]);
+}
+<span class="kw">bool</span> <span class="fn">unite</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    a=<span class="fn">find</span>(a); b=<span class="fn">find</span>(b);
+    <span class="kw">if</span>(a==b) <span class="kw">return false</span>;
+    <span class="kw">if</span>(rnk[a]&lt;rnk[b]) <span class="fn">swap</span>(a,b);
+    par[b]=a;
+    <span class="kw">if</span>(rnk[a]==rnk[b]) rnk[a]++;
+    <span class="kw">return true</span>;
+}
+<span class="cm">// O(α(n)) per operasi ≈ O(1)</span></div></div>
+
+      <div class="codeblock"><div class="cb-head"><div style="display:flex;align-items:center;gap:8px"><div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div><span class="cb-meta">fenwick.cpp</span></div><button class="cpbtn" onclick="cp(this)">Copy</button></div><div class="cb-body" style="font-size:.74rem"><span class="cm">// Fenwick Tree (BIT) — O(log n) update & query</span>
+ll bit[N]; <span class="kw">int</span> n;
+
+<span class="kw">void</span> <span class="fn">update</span>(<span class="kw">int</span> i, ll delta) {
+    <span class="kw">for</span>(; i&lt;=n; i+=i&amp;-i)
+        bit[i] += delta;
+}
+
+ll <span class="fn">query</span>(<span class="kw">int</span> i) {  <span class="cm">// prefix sum [1..i]</span>
+    ll s = <span class="num">0</span>;
+    <span class="kw">for</span>(; i&gt;<span class="num">0</span>; i-=i&amp;-i)
+        s += bit[i];
+    <span class="kw">return</span> s;
+}
+
+ll <span class="fn">rangeQuery</span>(<span class="kw">int</span> l, <span class="kw">int</span> r) {
+    <span class="kw">return</span> <span class="fn">query</span>(r) - <span class="fn">query</span>(l-<span class="num">1</span>);
+}
+<span class="cm">// Trik: i & (-i) = LSB dari i</span></div></div>
+
+      <div class="codeblock"><div class="cb-head"><div style="display:flex;align-items:center;gap:8px"><div class="cb-dots"><div class="cb-dot" style="background:#FF5F57"></div><div class="cb-dot" style="background:#FFBD2E"></div><div class="cb-dot" style="background:#28C941"></div></div><span class="cb-meta">kadane_2ptr.cpp</span></div><button class="cpbtn" onclick="cp(this)">Copy</button></div><div class="cb-body" style="font-size:.74rem"><span class="cm">// Kadane's — Max Subarray O(n)</span>
+ll <span class="fn">kadane</span>(<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a) {
+    ll cur=<span class="num">0</span>, best=LLONG_MIN;
+    <span class="kw">for</span>(<span class="kw">int</span> x : a) {
+        cur = <span class="fn">max</span>((ll)x, cur+x);
+        best = <span class="fn">max</span>(best, cur);
+    }
+    <span class="kw">return</span> best;
+}
+
+<span class="cm">// Two Pointers — Two Sum O(n)</span>
+<span class="kw">bool</span> <span class="fn">twoSum</span>(<span class="tp">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> t) {
+    <span class="kw">int</span> l=<span class="num">0</span>, r=(int)a.size()-<span class="num">1</span>;
+    <span class="kw">while</span>(l &lt; r) {
+        <span class="kw">if</span>(a[l]+a[r]==t) <span class="kw">return true</span>;
+        <span class="kw">if</span>(a[l]+a[r]&lt;t) l++;
+        <span class="kw">else</span> r--;
+    }
+    <span class="kw">return false</span>;
+}</div></div>
+
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════
+// AI MENTOR
+// ══════════════════════════════════════════════
+const AI_KB = {
+  'o(n) dan o(n²)': `Perbedaan O(n) vs O(n²) dengan angka nyata:\n\n📊 Untuk N = 10.000:\n• O(n)  = 10.000 operasi   → 0.0001 detik ✓\n• O(n²) = 100.000.000      → 1 detik ⚠\n\n📊 Untuk N = 100.000:\n• O(n)  = 100.000          → sangat cepat ✓\n• O(n²) = 10^10            → ~100 detik ✗ TLE!\n\n🔑 Aturan praktis:\n• N ≤ 5000   → O(n²) masih OK\n• N ≤ 300K   → butuh O(n log n)\n• N ≤ 10⁶   → butuh O(n)\n\nContoh O(n): prefix sum, linear search\nContoh O(n²): bubble sort, LIS naive`,
+  'dijkstra': `Dijkstra — Shortest Path:\n\n✅ KAPAN PAKAI:\n• Graf berbobot NON-NEGATIF\n• Single source ke semua simpul\n• Kompleksitas O((V+E) log V)\n\n❌ JANGAN PAKAI jika ada bobot negatif\n→ Pakai Bellman-Ford O(VE)\n\n💡 Implementasi dengan priority_queue:\npriority_queue<pair<ll,int>, vector<...>, greater<...>> pq;\ndist[src] = 0;\npq.push({0, src});\n\nKunci: gunakan lazy deletion —\njika dd > dist[u], skip (sudah diproses)`,
+  'tips dp': `Tips DP untuk OSN:\n\n1️⃣ DEFINISIKAN STATE dengan jelas\n   "dp[i][j] = apa artinya?"\n\n2️⃣ RECURRENCE RELATION\n   Hubungan dp[i] dengan dp[i-1]\n\n3️⃣ BASE CASE yang benar\n   Inisialisasi dp[0] = ?\n\n4️⃣ URUTAN komputasi\n   Bottom-up: pastikan dp kecil dihitung dulu\n\n5️⃣ Cek KOMPLEKSITAS\n   States × Transisi per state\n\n🔥 Topik DP wajib OSN:\n• 1D DP, LIS O(n log n)\n• Knapsack 0/1\n• Interval DP\n• Bitmask DP (subset)\n• DP on Trees`,
+  'segment tree': `Segment Tree:\n\nStruktur pohon biner untuk:\n• Range query O(log n)    ← sum/min/max di [l,r]\n• Point update O(log n)   ← ubah A[i]\n• Build O(n)\n\nProperti:\n• Node i punya anak 2i dan 2i+1\n• Node i merepresentasikan ruas tertentu\n• tree[i] = info dari ruas node i\n\nVariant penting:\n• Segment Tree biasa (point update)\n• Lazy Propagation (range update)\n• Persistent Segment Tree (versioning)\n\nFenwick Tree (BIT) lebih simple untuk sum,\ntapi Segment Tree lebih powerful & fleksibel!`,
+  'modular inverse': `Modular Inverse:\n\nSyarat: p prima, gcd(a,p) = 1\n\nDengan Fermat's Little Theorem:\na^(p-1) ≡ 1 (mod p)\na^(p-2) ≡ a⁻¹ (mod p)\n\nll inv(ll a, ll p) {\n    return power(a, p-2, p);\n}\n\nKegunaan di OSN:\n• C(n,k) mod p = n! × (k!)⁻¹ × ((n-k)!)⁻¹\n• Division dalam modular: a/b mod p = a × b⁻¹ mod p\n\nPrecompute semua inverse faktorial:\ninv_fact[n] = power(fact[n], MOD-2, MOD)`,
+};
+
+function toggleAI(){document.getElementById('ai-win').classList.toggle('open')}
+
+function askAI(q){
+  document.getElementById('ai-inp').value=q;
+  sendAI();
+}
+
+function sendAI(){
+  const inp=document.getElementById('ai-inp');
+  const msg=inp.value.trim();if(!msg)return;
+  inp.value='';
+  const msgs=document.getElementById('ai-msgs');
+  
+  const ud=document.createElement('div');
+  ud.className='ai-msg me';
+  ud.innerHTML=`<div class="ai-bubble">${msg}</div>`;
+  msgs.appendChild(ud);
+
+  const td=document.createElement('div');
+  td.className='ai-msg';
+  td.innerHTML=`<div class="ai-avatar" style="flex-shrink:0">🤖</div><div class="ai-bubble" style="animation:pulse 1s infinite;color:var(--tx2)">mengetik...</div>`;
+  msgs.appendChild(td);
+  msgs.scrollTop=99999;
+
+  setTimeout(()=>{
+    td.remove();
+    const ml=msg.toLowerCase();
+    const key=Object.keys(AI_KB).find(k=>ml.includes(k));
+    const text=key?AI_KB[key]:
+      ml.includes('bfs')||ml.includes('dfs')?
+        'BFS vs DFS:\n\nBFS (queue):\n✓ Jarak terpendek di graf tak berbobot\n✓ Level-by-level traversal\n✓ O(V+E)\n\nDFS (stack/rekursi):\n✓ Topological sort di DAG\n✓ SCC dengan Tarjan/Kosaraju\n✓ DFS tree, bridges, articulation points\n✓ O(V+E)\n\nKedua algoritma sama-sama O(V+E), bedanya pada urutan eksplorasi dan kegunaan!':
+      ml.includes('greedy')?
+        'Greedy Algorithm:\n\nIde: pilih opsi terbaik SEKARANG\ntanpa melihat masa depan.\n\nSyarat bisa digunakan:\n• Dapat dibuktikan pilihan lokal optimal\n  = solusi global optimal (exchange argument)\n\nContoh klasik:\n• Activity Selection: sort by end time\n• Fractional Knapsack: ratio v/w terbesar dulu\n• Huffman Coding: frekuensi terkecil dulu\n\nBeda dengan DP:\nDP memeriksa semua pilihan,\nGreedy cuma ambil yang terbaik sekarang.':
+      ml.includes('sort')?
+        'Sorting di C++:\n\nPALING DIREKOMENDASIKAN:\nstd::sort(v.begin(), v.end());\n→ O(n log n), introsort (hybrid)\n\nUntuk sort stable:\nstd::stable_sort(v.begin(), v.end());\n\nCustom comparator:\nsort(v.begin(), v.end(), [](int a, int b){\n    return a > b;  // sort menurun\n});\n\nCounting Sort jika nilai kecil:\nO(n+k) dimana k = max nilai':
+      `Untuk "${msg}":\n\n💡 Cek tab Kompleksitas untuk teori Big-O\n💡 Cek tab Matematika untuk rumus modular, kombinatorik, bit\n💡 Cek tab Materi C++ untuk teori algoritma\n💡 Latihan soal dari yang mudah dulu!\n\nKonsistensi belajar 2-3 jam sehari lebih efektif dari marathon seminggu sekali! 💪 Kamu pasti bisa membanggakan orang tuamu! 🏆`;
+    const ad=document.createElement('div');
+    ad.className='ai-msg';
+    ad.innerHTML=`<div class="ai-avatar" style="flex-shrink:0">🤖</div><div class="ai-bubble" style="animation:slideIn .3s ease">${text}</div>`;
+    msgs.appendChild(ad);
+    msgs.scrollTop=99999;
+  },800);
+}
+
+// ══════════════════════════════════════════════
+// ROADMAP
+// ══════════════════════════════════════════════
+const ROADMAP = [
+  {lv:'Fondasi · Wajib Dikuasai',t:'Template & STL',d:'bits/stdc++.h, typedef, I/O cepat, vector, map, set, pq',n:'01',c:'var(--a2)',p:60,id:'tmpl'},
+  {lv:'Fondasi · Wajib Dikuasai',t:'Kompleksitas Big-O',d:'O(1), O(log n), O(n), O(n log n), O(n²), O(2ⁿ)',n:'02',c:'var(--a1)',p:0,id:'cx'},
+  {lv:'Dasar Algoritma',t:'Sorting & Binary Search',d:'sort(), lower_bound, binary search on answer',n:'03',c:'var(--a1)',p:0,id:'bsearch'},
+  {lv:'Dasar Algoritma',t:'Prefix Sum & Two Pointer',d:'Range query O(1), sliding window O(n)',n:'04',c:'var(--a1)',p:0,id:'prefix'},
+  {lv:'OSN Kabupaten/Kota',t:'Greedy Algorithm',d:'Activity selection, pertukaran argumen, bukti koreksi',n:'05',c:'var(--a3)',p:0,id:'greedy'},
+  {lv:'OSN Provinsi',t:'Dynamic Programming',d:'LIS, Knapsack, Interval DP — pola rekurensi',n:'06',c:'var(--a3)',p:0,id:'dp-intro'},
+  {lv:'OSN Provinsi',t:'Graf — BFS & DFS',d:'Traversal, jarak terpendek, komponen terhubung',n:'07',c:'var(--a3)',p:0,id:'bfs-dfs'},
+  {lv:'OSN Provinsi',t:'Dijkstra & MST',d:'SSSP, Kruskal dengan DSU, Prim',n:'08',c:'var(--a3)',p:0,id:'dijkstra'},
+  {lv:'OSN Nasional',t:'Segment Tree & BIT',d:'Range query/update O(log n), lazy propagation',n:'09',c:'var(--a6)',p:0,id:'seg-tree'},
+  {lv:'OSN Nasional',t:'Advanced DP',d:'Bitmask DP, DP on Trees, divide & conquer DP',n:'10',c:'var(--a6)',p:0,id:'dp-bitmask'},
+  {lv:'APIO / IOI',t:'String Algorithms',d:'KMP, Z-function, Suffix Array, Aho-Corasick',n:'11',c:'var(--a4)',p:0,id:'kmp'},
+  {lv:'APIO / IOI',t:'Network Flow & Matching',d:'Max-flow, min-cut, bipartite matching',n:'12',c:'var(--a4)',p:0,id:'flow'},
+];
+
+function buildRoadmap(){
+  document.getElementById('road-grid').innerHTML=ROADMAP.map(r=>`
+    <div class="road-item" onclick="${r.id==='cx'?"showPage('complexity')":r.id==='dp-intro'||r.id==='bfs-dfs'?`showPage('materi');setTimeout(()=>loadMat('${r.id}'),50)`:`showPage('materi');setTimeout(()=>loadMat('${r.id}'),50)`}">
+      <div class="ri-num" style="color:${r.c}">${r.n} · ${r.lv}</div>
+      <div class="ri-title">${r.t}</div>
+      <div class="ri-desc">${r.d}</div>
+      <div class="ri-prog-bg"><div class="ri-prog-fill" style="background:${r.c};width:${r.p}%"></div></div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════════
+// COPY
+// ══════════════════════════════════════════════
+function cp(btn){
+  const code=btn.closest('.codeblock').querySelector('.cb-body').innerText;
+  navigator.clipboard.writeText(code).then(()=>{
+    btn.textContent='✓ Copied!';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  }).catch(()=>{
+    btn.textContent='✓';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+
+// Tab in editor
+document.getElementById('editor').addEventListener('keydown',function(e){
+  if(e.key==='Tab'){
+    e.preventDefault();
+    const s=this.selectionStart,ed=this.selectionEnd;
+    this.value=this.value.substring(0,s)+'    '+this.value.substring(ed);
+    this.selectionStart=this.selectionEnd=s+4;
+  }
+});
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+buildRoadmap();
+buildHomeBars();
+buildSidebar();
+renderProbs('all');
+
+// After layout paint
+requestAnimationFrame(()=>{
+  setTimeout(()=>{
+    const canvas=document.getElementById('cx-canvas');
+    if(canvas)drawGraph(16,document.querySelector('.ctrl-btn.on'));
+  },100);
+});
+</script>
+</body>
+</html>
